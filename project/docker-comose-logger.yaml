@@ -1,0 +1,82 @@
+version: "3.7"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    networks:
+      - ompnw
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+  # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docker.html
+
+  mongo:
+    image: mongo:4.2
+    restart: always
+    networks:
+      - ompnw
+    volumes:
+      - mongodata:/data/db
+
+  # Graylog: https://hub.docker.com/r/graylog/graylog/
+  graylog:
+    image: graylog/graylog:4.2
+    # image: graylog/graylog:4.2-arm64 # - for Apple Macbook M1
+    environment:
+      # CHANGE ME (must be at least 16 characters)!
+      - GRAYLOG_PASSWORD_SECRET=somepasswordpeppeq
+      # Password: admin
+      - GRAYLOG_ROOT_PASSWORD_SHA2=f7e0f354bbc12e844967119aee90ee99e3cfe135d92606c78a17a4d3ac4d471c
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9000/
+    networks:
+      - ompnw
+    links:
+      - mongo
+      - elasticsearch
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+      # Syslog TCP
+      - 1514:1514
+      # GELF TCP
+      - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp
+    restart: always
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.28
+    ports:
+      - 5775:5775/udp
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 5778:5778
+      - 16686:16686
+      - 14268:14268
+      - 14250:14250
+      - 9411:9411
+
+volumes:
+  esdata:
+    driver: local
+  mongodata:
+    driver: local
+
+networks:
+  ompnw:
+    driver: bridge

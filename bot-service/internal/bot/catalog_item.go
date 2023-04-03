@@ -147,10 +147,26 @@ func MakeOrderKeyboard(count string) interface{} {
 
 	return tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton(DISPLAY_PROFILE_BUTTON),
 			tgbotapi.NewKeyboardButton(DISPLAY_MENU_BUTTON),
 		),
+
 		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton(textBucket),
 		),
 	)
 }
+
+//short variant keyboard
+//func MakeOrderKeyboard(count string) interface{} {
+//	var textBucket = DISPLAY_ORDER_BUTTON + "(" + count + ")"
+//
+//	return tgbotapi.NewReplyKeyboard(
+//		tgbotapi.NewKeyboardButtonRow(
+//			tgbotapi.NewKeyboardButton(DISPLAY_MENU_BUTTON),
+//		),
+//		tgbotapi.NewKeyboardButtonRow(
+//			tgbotapi.NewKeyboardButton(textBucket),
+//		),
+//	)
+//}

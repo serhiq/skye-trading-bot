@@ -69,14 +69,19 @@ func updatePhoneAndDisplayProfile(app *app.App, input string, session *chat.Chat
 
 func NameInputHandler(app *app.App, input string, session *chat.Chat) error {
 	if input != "" {
+		var inputState = session.ChatState
 		session.NameUser = input
 		session.ChatState = chat.STATE_PREPARE_ORDER
 		err := app.RepoChat.UpdateChat(session)
 		if err != nil {
 			return err
 		}
-		return SayWelcome(app, input, session)
 
+		if inputState == chat.STATE_CHANGE_NAME {
+			return displayProfile(app, session.ChatId, session)
+		} else {
+			return SayWelcome(app, input, session)
+		}
 	} else {
 		msg := tgbotapi.NewMessage(session.ChatId, "Имя не может быть пустым")
 		msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)

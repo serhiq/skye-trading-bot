@@ -46,7 +46,7 @@ func CancelProfile() *commands.UserCommand {
 func MakeKeyboardProfileOrder() tgbotapi.InlineKeyboardMarkup {
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_PHONE_BUTTON, SetChangePhone().ToJson())),
-		//tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_NAME_BUTTON, SetChangeName().ToJson())),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_NAME_BUTTON, SetChangeName().ToJson())),
 		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CANCEL_PROFILE_BUTTON, CancelProfile().ToJson())),
 	)
 }

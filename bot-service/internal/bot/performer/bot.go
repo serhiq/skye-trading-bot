@@ -261,9 +261,13 @@ func New(options Options, repoProduct repository.ProductRepository, repoChat rep
 
 	//профиль
 	p.AddCommandHandler(b.DISPLAY_PROFILE_BUTTON, b.ProfileMenuHandler)
-	p.AddCallbackHandler(b.CHANGE_PHONE_COMMAND, b.ClickOnChangePhone)
 	p.AddCallbackHandler(b.CANCEL_FROM_PROFILE, b.ProfileOnCancel)
+
+	p.AddCallbackHandler(b.CHANGE_PHONE_COMMAND, b.ClickOnChangePhone)
 	p.AddInputHandler(chat.STATE_CHANGE_PHONE, b.ContactInputHandler)
+
+	p.AddCallbackHandler(b.CHANGE_NAME_COMMAND, b.ClickOnChangeName)
+	p.AddInputHandler(chat.STATE_CHANGE_NAME, b.NameInputHandler)
 
 	bot.Debug = false
 

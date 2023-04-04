@@ -20,10 +20,17 @@ const (
 )
 
 const (
-	ORDER_CONFIRM_MESSAGE_TITLE    = "✅ Заказ подтвержден! \n"
-	ORDER_CONFIRM_MESSAGE_SUBTITLE = "Номер заказа: "
-	ORDER_CONFIRM_MESSAGE_BODY     = "\nВ ближайшее время наш оператор позвонит Вам для подтверждения заказа 📞"
+	ORDER_CONFIRM_MESSAGE_BODY = "\nВ ближайшее время наш оператор позвонит Вам для подтверждения заказа 📞"
 )
+
+func FormatConfirmMessage(number string) string {
+	sb := strings.Builder{}
+	sb.WriteString("✅ Заказ №")
+	sb.WriteString(number)
+	sb.WriteString(" подтвержден! \n")
+	sb.WriteString(ORDER_CONFIRM_MESSAGE_BODY)
+	return sb.String()
+}
 
 func SetConfirmOrder() *commands.UserCommand {
 	return &commands.UserCommand{

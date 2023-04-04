@@ -35,11 +35,17 @@ func ClickOnConfirm(app *app.App, callback *tgbotapi.CallbackQuery) error {
 		fmt.Printf("error delete message: %s", err)
 	}
 
-	// todo send order hereme
-
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
 		return fmt.Errorf("Failed to get chat  %s", err)
+	}
+
+	order := session.GetDraftOrder()
+	order.Contacts.Phone = session.PhoneUser
+
+	number, err := app.RepoOrder.Send(order)
+	if err != nil {
+		return err
 	}
 
 	session.NewOrder()
@@ -48,7 +54,9 @@ func ClickOnConfirm(app *app.App, callback *tgbotapi.CallbackQuery) error {
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(callback.Message.Chat.ID, ORDER_CONFIRM_MESSAGE_TITLE+ORDER_CONFIRM_MESSAGE_BODY)
+	msg := tgbotapi.NewMessage(callback.Message.Chat.ID, FormatConfirmMessage(number))
+	msg.ParseMode = tgbotapi.ModeHTML
+
 	msg.ReplyMarkup = KeyboardMain()
 	return app.Reply(msg)
 }

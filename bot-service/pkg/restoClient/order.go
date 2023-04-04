@@ -4,23 +4,21 @@ import (
 	"fmt"
 	"github.com/serhiq/skye-trading-bot/pkg/restoClient/order"
 	domainOrder "github.com/serhiq/skye-trading-bot/pkg/type/order"
-	"strconv"
-	"time"
+	evo "github.com/softc24/evotor-resto-go"
 )
 
-func (c RestoClient) PostOrder(o *domainOrder.Order) (*order.Response, error) {
+func (c RestoClient) PostOrder(o *domainOrder.Order) (*evo.Order, error) {
 	request := order.ToResponse(o)
 
-	orderResponse := &order.Response{}
+	evoResponse := &evo.Order{}
 
 	request.State = "new"
-	request.ID = GetRandomOrderNumber()
 
 	endpoint := c.options.BaseUrl + "/order/" + c.options.Store
 	resp, err := c.client.R().
 		SetHeader("Authorization", c.options.Auth).
 		SetBody(request).
-		SetResult(&orderResponse).
+		SetResult(&evoResponse).
 		Post(endpoint)
 
 	if err != nil {
@@ -33,11 +31,5 @@ func (c RestoClient) PostOrder(o *domainOrder.Order) (*order.Response, error) {
 
 	// todo compare order and orderResponse
 
-	return orderResponse, nil
-
-}
-
-func GetRandomOrderNumber() string {
-	return strconv.FormatInt(time.Now().Unix(), 10)
-	//return strconv.FormatInt(time.Now().UnixNano(), 10)
+	return evoResponse, nil
 }

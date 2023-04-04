@@ -72,7 +72,7 @@ func (s *Server) initApp() (err error) {
 
 	s.store = store
 
-	err = store.Db.AutoMigrate(&repositoryChat.Chat{}, &repositoryProduct.Product{})
+	err = store.Db.AutoMigrate(&repositoryChat.Chat{}, &repositoryProduct.Product{}, &repositoryOrder.Order{}, &repositoryOrder.OrderPosition{})
 	if err != nil {
 		return err
 	}
@@ -102,7 +102,7 @@ func (s *Server) initApp() (err error) {
 
 	var repoProduct = repositoryProduct.New(s.store.Db)
 	var repoChat = repositoryChat.New(s.store.Db)
-	var repoOrder = repositoryOrder.New(evoClient)
+	var repoOrder = repositoryOrder.New(evoClient, s.store.Db)
 
 	syncWorker := worker.New(repoProduct, evoClient, r.New())
 

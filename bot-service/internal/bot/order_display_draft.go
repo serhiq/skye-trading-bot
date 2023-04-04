@@ -87,6 +87,13 @@ func ClickDisplayEditOrder(app *app.App, callback *tgbotapi.CallbackQuery) error
 	if err != nil {
 		fmt.Printf("error delete message: %s", err)
 	}
+	answer := tgbotapi.CallbackConfig{
+		CallbackQueryID: callback.ID,
+	}
+	err = app.Reply(answer)
+	if err != nil {
+		return err
+	}
 
 	return displayOrderWithMenu(app, callback.Message.Chat.ID)
 }

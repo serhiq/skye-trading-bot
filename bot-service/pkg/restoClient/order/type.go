@@ -27,8 +27,6 @@ type Response struct {
 	State     string      `json:"state"`
 	Contacts  interface{} `json:"contacts"`
 	Comment   string      `json:"comment"`
-	CreatedAt string      `json:"createdAt"`
-	UpdatedAt string      `json:"updatedAt"`
 	Positions []struct {
 		OrderUUID               string      `json:"order_uuid"`
 		Position                string      `json:"position"`

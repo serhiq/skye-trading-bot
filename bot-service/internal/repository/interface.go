@@ -8,7 +8,7 @@ import (
 )
 
 type OrderRepository interface {
-	Send(order *domainOrder.Order) error
+	Send(order *domainOrder.Order) (number string, err error)
 }
 
 type ProductRepository interface {

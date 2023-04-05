@@ -38,8 +38,7 @@ func Keyboard(menuitems []*product.Product, isRoot bool) tgbotapi.InlineKeyboard
 
 	for _, menuitem := range menuitems {
 		if menuitem.Group {
-			//buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("🗀  "+menuitem.Name, ClickOnFolder(menuitem.UUID).ToJson()))
-			buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData(menuitem.Name, ClickOnFolder(menuitem.UUID).ToJson()))
+			buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("🗀  "+menuitem.Name, ClickOnFolder(menuitem.UUID).ToJson()))
 		} else {
 			buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData(menuitem.Name+" - "+_type.FormatPriceWithCurrency(menuitem.Price), ClickOnProductItem(menuitem.UUID).ToJson()))
 		}

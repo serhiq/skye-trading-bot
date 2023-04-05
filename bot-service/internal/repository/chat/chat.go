@@ -127,7 +127,3 @@ func (r *Repository) DeleteChat(id string) error {
 func (c *Chat) IsCorrectName(name string) bool {
 	return name != ""
 }
-
-func (c *Chat) IsCorrectPhone(phone string) bool {
-	return ValidateRussianPhoneNumber(phone)
-}

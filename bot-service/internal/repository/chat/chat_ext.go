@@ -1,8 +1,16 @@
 package chat
 
-import "regexp"
+import (
+	"regexp"
+	"strconv"
+)
 
-func ValidateRussianPhoneNumber(number string) bool {
-	phoneRegex := regexp.MustCompile(`^\+7\d{10}$`)
-	return phoneRegex.MatchString(number)
+func ValidateRussianPhoneNumber(phone string) (bool, string) {
+	reg := regexp.MustCompile(`[\(\)\-\s]+`)
+	phone = reg.ReplaceAllString(phone, "")
+
+	if _, err := strconv.Atoi(phone); err != nil {
+		return false, "номер содержит недопустимые символы"
+	}
+	return true, ""
 }

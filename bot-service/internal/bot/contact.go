@@ -29,7 +29,9 @@ func ContactHandler(app *app.App, message *tgbotapi.Message) error {
 }
 
 func ContactInputHandler(app *app.App, input string, session *chat.Chat) error {
-	if chat.ValidateRussianPhoneNumber(input) {
+	ok, errMsg := chat.ValidateRussianPhoneNumber(input)
+
+	if ok {
 		if session.ChatState == chat.STATE_CHANGE_PHONE {
 			return updatePhoneAndDisplayProfile(app, input, session)
 		} else {
@@ -37,7 +39,7 @@ func ContactInputHandler(app *app.App, input string, session *chat.Chat) error {
 		}
 
 	} else {
-		msg := tgbotapi.NewMessage(session.ChatId, "Введите телефон в федеральном формате")
+		msg := tgbotapi.NewMessage(session.ChatId, errMsg)
 		msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
 		return app.Reply(msg)
 	}

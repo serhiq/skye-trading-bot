@@ -4,6 +4,7 @@ import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/serhiq/skye-trading-bot/internal/app"
+	"github.com/serhiq/skye-trading-bot/internal/repository/chat"
 )
 
 /*
@@ -18,7 +19,13 @@ func StartCommand(app *app.App, message *tgbotapi.Message) error {
 	}
 
 	if !session.HaveUserPhone() {
-		err := app.Reply(msg)
+		session.ChatState = chat.STATE_INPUT_PHONE
+		err = app.RepoChat.UpdateChat(session)
+		if err != nil {
+			return err
+		}
+
+		err = app.Reply(msg)
 		if err != nil {
 			return err
 		}

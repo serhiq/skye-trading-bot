@@ -92,7 +92,7 @@ func ClickDisplayEditOrder(app *app.App, callback *tgbotapi.CallbackQuery) error
 	}
 	err = app.Reply(answer)
 	if err != nil {
-		return err
+		fmt.Printf("callback error: %s", err)
 	}
 
 	return displayOrderWithMenu(app, callback.Message.Chat.ID)
@@ -120,7 +120,6 @@ func DisplayEditOrder(app *app.App, ChatId int64) (string, *tgbotapi.InlineKeybo
 	posMsg.ReplyMarkup = editKeyboard
 
 	return TEXT_EDIT_QUANTITY_MESSAGE, &editKeyboard, nil
-	//return app.Reply(posMsg)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,7 +174,14 @@ func ClickOnDecreasePositionEditOrderCallbackHandler(app *app.App, callback *tgb
 
 	}
 	order := session.GetDraftOrder()
-	order.DecreaseMenuItem(menuItem)
+	resultQuantity := order.DecreaseMenuItem(menuItem)
+	if resultQuantity == -1 {
+		// Send an empty response to the user
+		answer := tgbotapi.CallbackConfig{
+			CallbackQueryID: callback.ID,
+		}
+		return app.Reply(answer)
+	}
 
 	var msgText = "удалена позиция " + menuItem.Name + " " + menuItem.PriceString()
 	strOrder, err := order.ToJson()
@@ -195,6 +201,10 @@ func ClickOnDecreasePositionEditOrderCallbackHandler(app *app.App, callback *tgb
 	err = app.Reply(msg)
 	if err != nil {
 		return err
+	}
+
+	if resultQuantity == 0 {
+		return ClickDisplayEditOrder(app, callback)
 	}
 
 	return displayPositionEditMenu(app, c.Uuid, callback.Message.Chat.ID, callback.Message.MessageID)

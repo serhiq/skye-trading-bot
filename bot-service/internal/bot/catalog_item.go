@@ -22,8 +22,8 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 
 	order := session.GetDraftOrder()
 
-	ok := order.DecreaseMenuItem(menuItem)
-	if !ok {
+	resultQuantity := order.DecreaseMenuItem(menuItem)
+	if resultQuantity == -1 {
 		// Send an empty response to the user
 		answer := tgbotapi.CallbackConfig{
 			CallbackQueryID: callback.ID,

@@ -54,20 +54,20 @@ func (c *Order) AddItem(item *product.Product) {
 	})
 }
 
-func (c *Order) DecreaseMenuItem(item *product.Product) bool {
+func (c *Order) DecreaseMenuItem(item *product.Product) int {
 	for i, position := range c.Positions {
 		if position.ProductUUID == item.UUID {
 			if position.Quantity == 1 {
 				c.Positions = append(c.Positions[:i], c.Positions[i+1:]...)
-				return true
+				return 0
 			}
 
 			c.Positions[i].Quantity = position.Quantity - 1
-			return true
+			return c.Positions[i].Quantity
 		}
 	}
 
-	return false
+	return -1
 }
 
 func (c *Order) CountPosition() string {

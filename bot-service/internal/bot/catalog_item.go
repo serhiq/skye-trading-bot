@@ -24,11 +24,7 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 
 	resultQuantity := order.DecreaseMenuItem(menuItem)
 	if resultQuantity == -1 {
-		// Send an empty response to the user
-		answer := tgbotapi.CallbackConfig{
-			CallbackQueryID: callback.ID,
-		}
-		return app.Reply(answer)
+		return app.AnswerEmptyOnCallback(callback.ID)
 	}
 
 	var msgText = "удалена позиция " + menuItem.Name + " " + menuItem.PriceString()

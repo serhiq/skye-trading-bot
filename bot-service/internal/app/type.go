@@ -26,6 +26,17 @@ func (a App) Reply(msg tgbotapi.Chattable) error {
 	return nil
 }
 
+/*
+send an empty callback response for prevent the "waiting" icon from appearing on an inline keyboard
+*/
+func (a App) AnswerEmptyOnCallback(callbackID string) error {
+	answer := tgbotapi.CallbackConfig{
+		CallbackQueryID: callbackID,
+	}
+	return a.Reply(answer)
+
+}
+
 func (a App) ReplyWithId(msg tgbotapi.Chattable) (*tgbotapi.Message, error) {
 	resultMsg, err := a.Bot.Send(msg)
 

@@ -10,7 +10,7 @@ import (
 
 func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var c = commands.New(callback.Data)
-	menuItem, err := app.RepoProduct.GetMenu(c.Uuid)
+	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
 		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
 	}
@@ -24,7 +24,7 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 
 	resultQuantity := order.DecreaseMenuItem(menuItem)
 	if resultQuantity == -1 {
-		return app.AnswerEmptyOnCallback(callback.ID)
+		return app.Bot.AnswerEmptyOnCallback(callback.ID)
 	}
 
 	var msgText = "удалена позиция " + menuItem.Name + " " + menuItem.PriceString()
@@ -42,7 +42,7 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 
 	msg := tgbotapi.NewMessage(session.ChatId, msgText)
 	msg.ReplyMarkup = MakeOrderKeyboard(_type.FormatPriceWithCurrency(order.CalculateTotal()))
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 		markup := keyboard
 		editor.ReplyMarkup = &markup
 
-		err = app.Reply(editor)
+		err = app.Bot.Reply(editor)
 		if err != nil {
 			return err
 		}
@@ -66,7 +66,7 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 	} else {
 		updMsg := tgbotapi.NewEditMessageText(session.ChatId, callback.Message.MessageID, text)
 
-		err = app.Reply(updMsg)
+		err = app.Bot.Reply(updMsg)
 		if err != nil {
 			return err
 		}
@@ -76,7 +76,7 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 
 func ClickOnIncreasePositionCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var c = commands.New(callback.Data)
-	menuItem, err := app.RepoProduct.GetMenu(c.Uuid)
+	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
 		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
 	}
@@ -105,7 +105,7 @@ func ClickOnIncreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 
 	msg := tgbotapi.NewMessage(session.ChatId, msgText)
 	msg.ReplyMarkup = MakeOrderKeyboard(_type.FormatPriceWithCurrency(order.CalculateTotal()))
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}
@@ -121,7 +121,7 @@ func ClickOnIncreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 		markup := keyboard
 		editor.ReplyMarkup = &markup
 
-		err = app.Reply(editor)
+		err = app.Bot.Reply(editor)
 		if err != nil {
 			return err
 		}
@@ -129,7 +129,7 @@ func ClickOnIncreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 	} else {
 		updMsg := tgbotapi.NewEditMessageText(session.ChatId, callback.Message.MessageID, text)
 
-		err = app.Reply(updMsg)
+		err = app.Bot.Reply(updMsg)
 		if err != nil {
 			return err
 		}

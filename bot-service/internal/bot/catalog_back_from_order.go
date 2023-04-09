@@ -19,7 +19,7 @@ func BackToCatalogFromOrder(app *app.App, message *tgbotapi.Message) error {
 	msg := tgbotapi.NewMessage(message.Chat.ID, "Возврат к меню")
 	msg.ReplyMarkup = MakeOrderKeyboard(_type.FormatPriceWithCurrency(order.CalculateTotal()))
 
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}

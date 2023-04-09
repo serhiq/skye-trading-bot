@@ -16,7 +16,7 @@ func DisplayOrderConfirm(app *app.App, chatId int64) error {
 	order := session.GetDraftOrder()
 	if order.IsEmpty() {
 		msg := tgbotapi.NewMessage(chatId, EMPTY_CART_MESSAGE)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 
 	msg := tgbotapi.NewMessage(session.ChatId, ASK_ORDER_CONFIRM_MESSAGE+FormatDisplayConfirm(session, order).String())
@@ -25,12 +25,12 @@ func DisplayOrderConfirm(app *app.App, chatId int64) error {
 	msg.ParseMode = tgbotapi.ModeHTML
 	msg.ReplyMarkup = MakeKeyboardConfirmOrder()
 
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }
 
 func ClickOnConfirm(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
-	err := app.Reply(deleteMsg)
+	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
 		fmt.Printf("error delete message: %s", err)
 	}
@@ -42,8 +42,9 @@ func ClickOnConfirm(app *app.App, callback *tgbotapi.CallbackQuery) error {
 
 	order := session.GetDraftOrder()
 	order.Contacts.Phone = session.PhoneUser
+	order.Contacts.Name = session.NameUser
 
-	number, err := app.RepoOrder.Send(order)
+	number, err := app.OrderController.SendOrder(order)
 	if err != nil {
 		return err
 	}
@@ -58,12 +59,12 @@ func ClickOnConfirm(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	msg.ParseMode = tgbotapi.ModeHTML
 
 	msg.ReplyMarkup = KeyboardMain()
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }
 
 func ClickOnCancel(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
-	err := app.Reply(deleteMsg)
+	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
 		fmt.Printf("error delete message: %s", err)
 	}
@@ -81,5 +82,5 @@ func ClickOnCancel(app *app.App, callback *tgbotapi.CallbackQuery) error {
 
 	msg := tgbotapi.NewMessage(callback.Message.Chat.ID, "Заказ отменен")
 	msg.ReplyMarkup = KeyboardMain()
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }

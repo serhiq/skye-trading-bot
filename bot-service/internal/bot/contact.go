@@ -41,7 +41,7 @@ func ContactInputHandler(app *app.App, input string, session *chat.Chat) error {
 	} else {
 		msg := tgbotapi.NewMessage(session.ChatId, errMsg)
 		msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 }
 
@@ -51,11 +51,11 @@ func SavePhoneAndInputName(app *app.App, input string, session *chat.Chat) error
 	err := app.RepoChat.UpdateChat(session)
 	if err != nil {
 		var errorMsg = tgbotapi.NewMessage(session.ChatId, ADD_ACCOUNT_MESSAGE_ERROR)
-		return app.Reply(errorMsg)
+		return app.Bot.Reply(errorMsg)
 	}
 	msg := tgbotapi.NewMessage(session.ChatId, "Укажите Ваше имя, пожалуйста")
 	msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }
 
 func updatePhoneAndDisplayProfile(app *app.App, input string, session *chat.Chat) error {
@@ -64,7 +64,7 @@ func updatePhoneAndDisplayProfile(app *app.App, input string, session *chat.Chat
 	err := app.RepoChat.UpdateChat(session)
 	if err != nil {
 		var errorMsg = tgbotapi.NewMessage(session.ChatId, ADD_ACCOUNT_MESSAGE_ERROR)
-		return app.Reply(errorMsg)
+		return app.Bot.Reply(errorMsg)
 	}
 	return displayProfile(app, session.ChatId, session)
 }
@@ -87,12 +87,12 @@ func NameInputHandler(app *app.App, input string, session *chat.Chat) error {
 	} else {
 		msg := tgbotapi.NewMessage(session.ChatId, "Имя не может быть пустым")
 		msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 }
 
 func SayWelcome(app *app.App, input string, session *chat.Chat) error {
 	msg := tgbotapi.NewMessage(session.ChatId, FormatHelloMessage(input))
 	msg.ReplyMarkup = KeyboardMain()
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }

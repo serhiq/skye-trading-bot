@@ -8,5 +8,5 @@ import (
 func displayMenu(app *app.App, chatId int64) error {
 	msg := tgbotapi.NewMessage(chatId, "Главное меню")
 	msg.ReplyMarkup = KeyboardMain()
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }

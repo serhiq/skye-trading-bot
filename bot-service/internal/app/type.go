@@ -3,21 +3,31 @@ package app
 import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/serhiq/skye-trading-bot/internal/contorller"
 	repositoryChat "github.com/serhiq/skye-trading-bot/internal/repository"
-	repositoryOrder "github.com/serhiq/skye-trading-bot/internal/repository"
-	repositoryProduct "github.com/serhiq/skye-trading-bot/internal/repository"
 )
 
 type App struct {
-	RepoProduct repositoryProduct.ProductRepository
-	RepoChat    repositoryChat.ChatRepository
-	RepoOrder   repositoryOrder.OrderRepository
+	//RepoProduct repositoryProduct.ProductRepository
+	RepoChat repositoryChat.ChatRepository
+	//RepoOrder repositoryOrder.OrderRepository
 
-	Bot *tgbotapi.BotAPI
+	ProductController contorller.ProductController
+	OrderController   contorller.OrderController
+
+	Bot *TelegramBot
 }
 
-func (a App) Reply(msg tgbotapi.Chattable) error {
-	_, err := a.Bot.Send(msg)
+type TelegramBot struct {
+	Api *tgbotapi.BotAPI
+}
+
+func NewTelegramBot(b *tgbotapi.BotAPI) *TelegramBot {
+	return &TelegramBot{Api: b}
+}
+
+func (t TelegramBot) Reply(msg tgbotapi.Chattable) error {
+	_, err := t.Api.Send(msg)
 
 	if err != nil {
 		return NewErrorRespond(err)
@@ -29,16 +39,16 @@ func (a App) Reply(msg tgbotapi.Chattable) error {
 /*
 send an empty callback response for prevent the "waiting" icon from appearing on an inline keyboard
 */
-func (a App) AnswerEmptyOnCallback(callbackID string) error {
+func (t TelegramBot) AnswerEmptyOnCallback(callbackID string) error {
 	answer := tgbotapi.CallbackConfig{
 		CallbackQueryID: callbackID,
 	}
-	return a.Reply(answer)
+	return t.Reply(answer)
 
 }
 
-func (a App) ReplyWithId(msg tgbotapi.Chattable) (*tgbotapi.Message, error) {
-	resultMsg, err := a.Bot.Send(msg)
+func (t TelegramBot) ReplyWithId(msg tgbotapi.Chattable) (*tgbotapi.Message, error) {
+	resultMsg, err := t.Api.Send(msg)
 
 	if err != nil {
 		return nil, NewErrorRespond(err)

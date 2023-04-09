@@ -22,7 +22,7 @@ func ClickOnChangeName(app *app.App, callback *tgbotapi.CallbackQuery) error {
 
 	requestContact := tgbotapi.NewMessage(callback.Message.Chat.ID, REQUEST_EDIT_NAME_MESSAGE)
 	requestContact.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-	return app.Reply(requestContact)
+	return app.Bot.Reply(requestContact)
 }
 
 const (

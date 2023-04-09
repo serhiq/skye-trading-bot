@@ -6,6 +6,7 @@ import (
 	"github.com/serhiq/skye-trading-bot/internal/app"
 	b "github.com/serhiq/skye-trading-bot/internal/bot"
 	"github.com/serhiq/skye-trading-bot/internal/bot/commands"
+	"github.com/serhiq/skye-trading-bot/internal/contorller"
 	"github.com/serhiq/skye-trading-bot/internal/logger"
 	"github.com/serhiq/skye-trading-bot/internal/repository"
 	"github.com/serhiq/skye-trading-bot/internal/repository/chat"
@@ -197,7 +198,7 @@ func (p *Performer) processError(err error, update tgbotapi.Update) {
 	}
 }
 
-func New(options Options, repoProduct repository.ProductRepository, repoChat repository.ChatRepository, repoOrder repository.OrderRepository) (*Performer, error) {
+func New(options Options, productController contorller.ProductController, repoChat repository.ChatRepository, orderController contorller.OrderController) (*Performer, error) {
 	bot, err := tgbotapi.NewBotAPI(options.Token)
 	if err != nil {
 		return nil, err
@@ -205,10 +206,10 @@ func New(options Options, repoProduct repository.ProductRepository, repoChat rep
 
 	var p = Performer{
 		App: &app.App{
-			RepoProduct: repoProduct,
-			RepoChat:    repoChat,
-			RepoOrder:   repoOrder,
-			Bot:         bot,
+			ProductController: productController,
+			RepoChat:          repoChat,
+			OrderController:   orderController,
+			Bot:               app.NewTelegramBot(bot),
 		}}
 
 	p.AddMenuCommandHandler("start", b.StartCommand)

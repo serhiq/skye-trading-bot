@@ -22,14 +22,14 @@ func displayOrderWithMenu(app *app.App, chatId int64) error {
 	order := session.GetDraftOrder()
 	if order.IsEmpty() {
 		msg := tgbotapi.NewMessage(chatId, EMPTY_CART_MESSAGE)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 
 	msg := tgbotapi.NewMessage(session.ChatId, FormatDisplayDraft(session, order).String())
 	msg.ParseMode = tgbotapi.ModeHTML
 	msg.ReplyMarkup = KeyboardOrder()
 
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}
@@ -40,11 +40,11 @@ func displayOrderWithMenu(app *app.App, chatId int64) error {
 	// позиций в заказе нет
 	if keyboard == nil {
 		msg := tgbotapi.NewMessage(session.ChatId, text)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	} else {
 		msg := tgbotapi.NewMessage(session.ChatId, text)
 		msg.ReplyMarkup = keyboard
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 }
 
@@ -55,7 +55,7 @@ func ClickOnEditPositionCallbackHandler(app *app.App, callback *tgbotapi.Callbac
 }
 
 func displayPositionEditMenu(app *app.App, productUuid string, chatId int64, messageId int) error {
-	menuItem, err := app.RepoProduct.GetMenu(productUuid)
+	menuItem, err := app.ProductController.GetProductByUuid(productUuid)
 	if err != nil {
 		return fmt.Errorf("Failed to get menu item %s, err:  %s", productUuid, err)
 	}
@@ -77,20 +77,20 @@ func displayPositionEditMenu(app *app.App, productUuid string, chatId int64, mes
 	var title = fmt.Sprintf("%s\n%d x %s = %s", position.ProductName, position.Quantity, _type.FormatPrice(position.PriceWithDiscount), _type.FormatPriceWithCurrency(totalPosition))
 
 	msg := tgbotapi.NewEditMessageTextAndMarkup(session.ChatId, messageId, title, MakePositionEditKeyboard(menuItem.UUID))
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 func ClickDisplayEditOrder(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
-	err := app.Reply(deleteMsg)
+	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
 		fmt.Printf("error delete message: %s", err)
 	}
 	answer := tgbotapi.CallbackConfig{
 		CallbackQueryID: callback.ID,
 	}
-	err = app.Reply(answer)
+	err = app.Bot.Reply(answer)
 	if err != nil {
 		fmt.Printf("callback error: %s", err)
 	}
@@ -126,7 +126,7 @@ func DisplayEditOrder(app *app.App, ChatId int64) (string, *tgbotapi.InlineKeybo
 
 func ClickOnIncreasePositionEditOrderCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var c = commands.New(callback.Data)
-	menuItem, err := app.RepoProduct.GetMenu(c.Uuid)
+	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
 		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
 	}
@@ -154,7 +154,7 @@ func ClickOnIncreasePositionEditOrderCallbackHandler(app *app.App, callback *tgb
 
 	msg := tgbotapi.NewMessage(session.ChatId, msgText)
 
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}
@@ -163,7 +163,7 @@ func ClickOnIncreasePositionEditOrderCallbackHandler(app *app.App, callback *tgb
 }
 func ClickOnDecreasePositionEditOrderCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var c = commands.New(callback.Data)
-	menuItem, err := app.RepoProduct.GetMenu(c.Uuid)
+	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
 		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
 	}
@@ -180,7 +180,7 @@ func ClickOnDecreasePositionEditOrderCallbackHandler(app *app.App, callback *tgb
 		answer := tgbotapi.CallbackConfig{
 			CallbackQueryID: callback.ID,
 		}
-		return app.Reply(answer)
+		return app.Bot.Reply(answer)
 	}
 
 	var msgText = "удалена позиция " + menuItem.Name + " " + menuItem.PriceString()
@@ -198,7 +198,7 @@ func ClickOnDecreasePositionEditOrderCallbackHandler(app *app.App, callback *tgb
 
 	msg := tgbotapi.NewMessage(session.ChatId, msgText)
 
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}

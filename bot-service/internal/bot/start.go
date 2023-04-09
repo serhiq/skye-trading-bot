@@ -25,7 +25,7 @@ func StartCommand(app *app.App, message *tgbotapi.Message) error {
 			return err
 		}
 
-		err = app.Reply(msg)
+		err = app.Bot.Reply(msg)
 		if err != nil {
 			return err
 		}
@@ -35,10 +35,10 @@ func StartCommand(app *app.App, message *tgbotapi.Message) error {
 			tgbotapi.NewKeyboardButtonContact(SEND_PHONE_BUTTON),
 		))
 
-		return app.Reply(requestContact)
+		return app.Bot.Reply(requestContact)
 	} else {
 		msg.ReplyMarkup = KeyboardMain()
-		err = app.Reply(msg)
+		err = app.Bot.Reply(msg)
 		if err != nil {
 			return err
 		}

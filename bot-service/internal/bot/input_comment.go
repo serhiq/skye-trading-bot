@@ -40,7 +40,7 @@ func InputCommentHandler(app *app.App, input string, session *chat.Chat) error {
 
 func ClickOnNoCommentCallback(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
-	err := app.Reply(deleteMsg)
+	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
 		fmt.Printf("error delete message: %s", err)
 	}

@@ -26,11 +26,11 @@ func InputLocationHandler(app *app.App, input string, session *chat.Chat) error 
 
 		msg := tgbotapi.NewMessage(session.ChatId, TIME_QUESTION)
 		msg.ReplyMarkup = KeyboardDeliveryTime()
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 
 	} else {
 		msg := tgbotapi.NewMessage(session.ChatId, "Адрес доставки не может быть пустым")
 		msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 }

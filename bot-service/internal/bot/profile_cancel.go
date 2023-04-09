@@ -7,7 +7,7 @@ import (
 )
 
 func ProfileOnCancel(app *app.App, callback *tgbotapi.CallbackQuery) error {
-	err := app.AnswerEmptyOnCallback(callback.ID)
+	err := app.Bot.AnswerEmptyOnCallback(callback.ID)
 	fmt.Printf("error on send emptyCallback: %s", err)
 	return displayMenu(app, callback.Message.Chat.ID)
 }

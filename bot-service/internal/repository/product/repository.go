@@ -9,6 +9,62 @@ type Repository struct {
 	Db *gorm.DB
 }
 
+func (g *Repository) Import(products []*domainProduct.Product) error {
+	err := g.Db.Transaction(func(tx *gorm.DB) error {
+
+		g.Db.Exec("DELETE FROM products")
+
+		for _, item := range products {
+			if err := g.Db.Create(mapToDatabaseProduct(item)).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func mapToDatabaseProduct(r *domainProduct.Product) *Product {
+	return &Product{
+		Name:        r.Name,
+		UUID:        r.UUID,
+		ParentUUID:  r.ParentUUID,
+		Group:       r.Group,
+		Image:       r.Image,
+		MeasureName: r.MeasureName,
+		Price:       r.Price,
+	}
+
+}
+
+func (g *Repository) GetProductByParent(parentUuid string) ([]*domainProduct.Product, error) {
+	var items []Product
+	var products = []*domainProduct.Product{}
+
+	err := g.Db.Where("parent_uuid = ?", parentUuid).Model(&Product{}).Find(&items).Error
+	if err != nil {
+		return nil, err
+	}
+
+	for _, item := range items {
+		products = append(products, ToDomain(&item))
+
+	}
+
+	return products, err
+}
+
+func (g *Repository) GetProductByUuid(uuid string) (*domainProduct.Product, error) {
+	var item Product
+	err := g.Db.Where("uuid = ?", uuid).Find(&item).Error
+	return ToDomain(&item), err
+}
+
 func New(Db *gorm.DB) *Repository {
 	return &Repository{
 		Db: Db,
@@ -23,6 +79,7 @@ type Product struct {
 	Group       bool   `json:"group"`
 	Image       string `json:"image"`
 	MeasureName string `json:"measureName,omitempty"  gorm:"column:measure_name"`
+	Description string `json:"description,omitempty"  gorm:"column:description"`
 	Price       uint64 // Цена в копейках
 }
 
@@ -32,50 +89,6 @@ type Tabler interface {
 
 func (Product) TableName() string {
 	return "products"
-
-}
-
-func (g *Repository) ImportMenu(items []*Product) error {
-	err := g.Db.Transaction(func(tx *gorm.DB) error {
-
-		g.Db.Exec("DELETE FROM products")
-
-		for _, item := range items {
-			if err := g.Db.Create(item).Error; err != nil {
-				return err
-			}
-		}
-		return nil
-	})
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (g *Repository) GetMenuItemByParent(parent string) ([]*domainProduct.Product, error) {
-	var items []Product
-	var products = []*domainProduct.Product{}
-
-	err := g.Db.Where("parent_uuid = ?", parent).Model(&Product{}).Find(&items).Error
-	if err != nil {
-		return nil, err
-	}
-
-	for _, item := range items {
-		products = append(products, ToDomain(&item))
-
-	}
-
-	return products, err
-}
-
-func (g *Repository) GetMenu(id string) (*domainProduct.Product, error) {
-	var item Product
-	err := g.Db.Where("uuid = ?", id).Find(&item).Error
-	return ToDomain(&item), err
 }
 
 func ToDomain(r *Product) *domainProduct.Product {

@@ -1,4 +1,4 @@
-package order
+package restoranClient
 
 import (
 	"github.com/serhiq/skye-trading-bot/internal/bot"

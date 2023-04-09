@@ -17,7 +17,7 @@ func ClearOrderHandler(app *app.App, message *tgbotapi.Message) error {
 	order := session.GetDraftOrder()
 	if order.IsEmpty() {
 		msg := tgbotapi.NewMessage(message.Chat.ID, EMPTY_CART_MESSAGE)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 
 	session.NewOrder()
@@ -25,13 +25,13 @@ func ClearOrderHandler(app *app.App, message *tgbotapi.Message) error {
 
 	err = app.RepoChat.UpdateChat(session)
 	if err != nil {
-		return app.Reply(tgbotapi.NewMessage(message.Chat.ID, "Ошибка очистки заказа"))
+		return app.Bot.Reply(tgbotapi.NewMessage(message.Chat.ID, "Ошибка очистки заказа"))
 	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, CLEAR_ORDER_MESSAGE)
 	msg.ReplyMarkup = MakeOrderKeyboard("0")
 
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}

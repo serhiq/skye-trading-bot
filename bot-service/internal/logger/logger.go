@@ -29,22 +29,6 @@ func InitLogger(cfg config.Config) (err error) {
 	SugaredLogger = notSugaredLogger.Sugar().With(
 		"service", cfg.Project.ServiceName,
 	)
-	//
-	//if zapConfig == nil {
-	//	log, err = zap.NewDevelopment(zap.AddCallerSkip(1))
-	//} else {
-	//	if zapConfig.Encoding == "json" {
-	//		zapConfig.EncoderConfig = zap.NewProductionEncoderConfig()
-	//		zapConfig.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	//	} else {
-	//		zapConfig.EncoderConfig = zap.NewDevelopmentEncoderConfig()
-	//	}
-	//	log, err = zapConfig.Build(zap.AddCallerSkip(1))
-	//}
-	//if err != nil {
-	//	return
-	//}
-	//s.logger = log.Sugar()
 	return nil
 }
 

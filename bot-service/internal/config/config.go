@@ -17,11 +17,12 @@ var (
 )
 
 type Config struct {
-	Project       Project       `yaml:"project"`
-	Telegram      Telegram      `yaml:"telegram"`
-	RestaurantAPI RestaurantAPI `yaml:"restaurant_api"`
-	DBConfig      DBConfig      `yaml:"database"`
-	Telemetry     Telemetry     `yaml:"telemetry"`
+	Project    Project    `yaml:"project"`
+	Telegram   Telegram   `yaml:"telegram"`
+	ProductAPI ProductAPI `yaml:"product_api"`
+	OrderAPI   OrderAPI   `yaml:"order_api"`
+	DBConfig   DBConfig   `yaml:"database"`
+	Telemetry  Telemetry  `yaml:"telemetry"`
 }
 
 type Project struct {
@@ -34,10 +35,33 @@ type Telegram struct {
 	Token string `yaml:"token" envconfig:"TELEGRAM_TOKEN" validate:"required"`
 }
 
-type RestaurantAPI struct {
-	BaseURL string `yaml:"base_url" envconfig:"RESTAURANT_API_BASE_URL,omitempty"`
-	Auth    string `yaml:"auth" envconfig:"RESTAURANT_API_AUTH,omitempty"`
-	Store   string `yaml:"store" envconfig:"RESTAURANT_API_STORE,omitempty"`
+const (
+	EvotorAPIKind ProductApiKind = "evo_api"
+	RestoAPIKind  ProductApiKind = "resto_api"
+)
+
+type ProductApiKind string
+
+type ProductAPI struct {
+	Kind     ProductApiKind `yaml:"kind"   envconfig:"PRODUCT_API_KIND,omitempty"`
+	BaseURL  string         `yaml:"base_url" envconfig:"PRODUCT_API_BASE_URL,omitempty"`
+	Auth     string         `yaml:"auth" envconfig:"PRODUCT_API_AUTH,omitempty"`
+	Store    string         `yaml:"store" envconfig:"PRODUCT_API_STORE,omitempty"`
+	MenuUuid string         `yaml:"menu_root" envconfig:"PRODUCT_API_ROOT_UUID,omitempty"`
+}
+
+const (
+	OrderAPIKind      OrderApiKind = "order_api"
+	RestoOrderAPIKind OrderApiKind = "resto_api"
+)
+
+type OrderApiKind string
+
+type OrderAPI struct {
+	Kind    OrderApiKind `yaml:"kind"     envconfig:"ORDER_API_KIND,omitempty"`
+	BaseURL string       `yaml:"base_url" envconfig:"ORDER_API_BASE_URL,omitempty"`
+	Auth    string       `yaml:"auth"     envconfig:"ORDER_API_AUTH,omitempty"`
+	Store   string       `yaml:"store"    envconfig:"ORDER_API_STORE,omitempty"`
 }
 
 type DBConfig struct {
@@ -107,12 +131,34 @@ func validate(cfg *Config) error {
 		return fmt.Errorf("config: %s is not set", "TELEGRAM_TOKEN")
 	}
 
-	if cfg.RestaurantAPI.BaseURL == "" {
-		return fmt.Errorf("config: %s is not set", "RESTAURANT_API_BASE_URL")
+	if cfg.ProductAPI.Kind == "" {
+		return fmt.Errorf("config: %s is not set", "Kind")
+	}
+	if cfg.ProductAPI.BaseURL == "" {
+		return fmt.Errorf("config: %s is not set", "API_BASE_URL")
 	}
 
-	if cfg.RestaurantAPI.Auth == "" {
-		return fmt.Errorf("config: %s is not set", "RESTAURANT_API_AUTH")
+	if cfg.ProductAPI.Auth == "" {
+		return fmt.Errorf("config: %s is not set", "Auth")
+	}
+
+	if cfg.ProductAPI.Store == "" {
+		return fmt.Errorf("config: %s is not set", "Store")
+	}
+
+	if cfg.OrderAPI.Kind == "" {
+		return fmt.Errorf("config: %s is not set", "Kind")
+	}
+	if cfg.OrderAPI.BaseURL == "" {
+		return fmt.Errorf("config: %s is not set", "API_BASE_URL")
+	}
+
+	if cfg.OrderAPI.Auth == "" {
+		return fmt.Errorf("config: %s is not set", "Auth")
+	}
+
+	if cfg.OrderAPI.Store == "" {
+		return fmt.Errorf("config: %s is not set", "Store")
 	}
 
 	if cfg.DBConfig.DatabaseName == "" {

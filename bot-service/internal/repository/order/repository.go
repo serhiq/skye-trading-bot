@@ -1,34 +1,23 @@
 package order
 
 import (
-	"github.com/serhiq/skye-trading-bot/pkg/restoClient"
 	domainOrder "github.com/serhiq/skye-trading-bot/pkg/type/order"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Repository struct {
-	evoClient *restoClient.RestoClient
-	Db        *gorm.DB
+	Db *gorm.DB
 }
 
-func New(c *restoClient.RestoClient, Db *gorm.DB) *Repository {
-	return &Repository{
-		evoClient: c,
-		Db:        Db,
-	}
+func (g *Repository) Insert(order *domainOrder.Order) error {
+	return g.Db.Save(mapToDatabaseOrder(order)).Error
 }
 
-func (r Repository) Send(order *domainOrder.Order) (number string, err error) {
-	response, err := r.evoClient.PostOrder(order)
-	if err != nil {
-		return "", err
-	}
-
-	result := []OrderPosition{}
+func mapToDatabaseOrder(order *domainOrder.Order) *Order {
 	var total uint64
+	positions := []OrderPosition{}
 
-	for _, pos := range response.Positions {
+	for _, pos := range order.Positions {
 		dbPos := OrderPosition{
 			ProductUUID:       pos.ProductUUID,
 			ProductName:       pos.ProductName,
@@ -36,40 +25,54 @@ func (r Repository) Send(order *domainOrder.Order) (number string, err error) {
 			PriceWithDiscount: uint64(pos.PriceWithDiscount),
 			Quantity:          uint64(pos.Quantity),
 		}
-
-		result = append(result, dbPos)
 		total = +dbPos.Total()
+		positions = append(positions, dbPos)
 	}
 
-	var dbOrder = Order{
-		UUID:        response.UUID,
-		ID_EXTERNAL: response.ID,
-		Number:      response.Number,
-		CreatedAt:   response.CreatedAt.Time,
-		UpdatedAt:   response.UpdatedAt.Time,
-		Phone:       response.Contacts.Phone,
-		State:       response.State,
-		Comment:     response.Comment,
-		Total:       total,
-		Positions:   result,
+	return &Order{
+		UUID:        order.ID,
+		ID_EXTERNAL: order.ExternalID,
+		Number:      order.Number,
+		//CreatedAt:   order.CreatedAt.Time,
+		//UpdatedAt:   order.UpdatedAt.Time,
+		Phone:     order.Contacts.Phone,
+		State:     order.State,
+		Comment:   order.Comment,
+		Total:     total,
+		Positions: positions,
 	}
 
-	r.Db.Save(&dbOrder)
+}
 
-	return response.Number, nil
+func New(Db *gorm.DB) *Repository {
+	return &Repository{
+		Db: Db,
+	}
+}
+
+type Tabler interface {
+	TableName() string
+}
+
+func (Order) TableName() string {
+	return "orders"
+}
+
+func (OrderPosition) TableName() string {
+	return "order_positions"
 }
 
 type Order struct {
 	ID          uint64 `gorm:"primaryKey;autoIncrement:true"`
 	UUID        string
-	ID_EXTERNAL string
+	ID_EXTERNAL string `gorm:"column:id_external"`
 	Number      string
-	CreatedAt   time.Time `json:"createdAt,omitempty"` // дата создания
-	UpdatedAt   time.Time `json:"updatedAt,omitempty"` // дата обновления
-	Phone       string
+	Updated     int64 `gorm:"autoUpdateTime:milli"` // Use unix milli seconds as updating time
+	Created     int64 `gorm:"autoCreateTime"`       // Use unix seconds as creating time	Phone       string
 	State       string
 	Comment     string
 	Total       uint64
+	Phone       string
 	Positions   []OrderPosition `gorm:"foreignKey:id"`
 }
 
@@ -94,9 +97,3 @@ func (pos OrderPosition) Total() uint64 {
 	}
 	return price * pos.Quantity
 }
-
-//func GetAll(db *gorm.DB) ([]Order, error) {
-//	var users []Order
-//	err := db.Model(&Order{}).Preload("Positions").Find(&users).Error
-//	return users, err
-//}

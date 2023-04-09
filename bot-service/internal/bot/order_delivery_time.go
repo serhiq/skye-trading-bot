@@ -11,7 +11,7 @@ import (
 func ClickOnSetTimeCallback(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	// удаляем сообщение
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
-	err := app.Reply(deleteMsg)
+	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
 		fmt.Printf("error delete message: %s", err)
 	}
@@ -27,7 +27,7 @@ func ClickOnSetTimeCallback(app *app.App, callback *tgbotapi.CallbackQuery) erro
 	order.Details.DeliveryTime = c.Command
 
 	msg := tgbotapi.NewMessage(callback.Message.Chat.ID, FormantDescription(c.Command))
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}
@@ -47,5 +47,5 @@ func ClickOnSetTimeCallback(app *app.App, callback *tgbotapi.CallbackQuery) erro
 	msg = tgbotapi.NewMessage(callback.Message.Chat.ID, ASK_COMMENT)
 
 	msg.ReplyMarkup = KeyboardComment()
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }

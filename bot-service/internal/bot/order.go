@@ -18,20 +18,20 @@ func CreateOrderHandler(app *app.App, message *tgbotapi.Message) error {
 	order := session.GetDraftOrder()
 	if order.IsEmpty() {
 		msg := tgbotapi.NewMessage(message.Chat.ID, EMPTY_CART_MESSAGE)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, DELIVERY_METHOD_QUESTION)
 
 	msg.ReplyMarkup = MakeKeyboardDeliveryMethod()
 
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }
 
 func ClickOnSetDeliveryCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	// удаляем сообщение
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
-	err := app.Reply(deleteMsg)
+	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
 		fmt.Printf("error delete message: %s", err)
 	}
@@ -47,7 +47,7 @@ func ClickOnSetDeliveryCallbackHandler(app *app.App, callback *tgbotapi.Callback
 	order.Details.DeliveryOptions = c.Command
 
 	msg := tgbotapi.NewMessage(callback.Message.Chat.ID, FormantDescription(c.Command))
-	err = app.Reply(msg)
+	err = app.Bot.Reply(msg)
 	if err != nil {
 		return err
 	}
@@ -68,7 +68,7 @@ func ClickOnSetDeliveryCallbackHandler(app *app.App, callback *tgbotapi.Callback
 
 		msg := tgbotapi.NewMessage(callback.Message.Chat.ID, TIME_PICKUP_QUESTION)
 		msg.ReplyMarkup = KeyboardDeliveryTime()
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 
 	if c.Command == DELIVERY_COMMAND {
@@ -87,7 +87,7 @@ func ClickOnSetDeliveryCallbackHandler(app *app.App, callback *tgbotapi.Callback
 
 		msg = tgbotapi.NewMessage(callback.Message.Chat.ID, ASK_LOCATION)
 		msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-		return app.Reply(msg)
+		return app.Bot.Reply(msg)
 	}
 
 	return nil

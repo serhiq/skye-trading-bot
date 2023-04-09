@@ -9,6 +9,7 @@ type Product struct {
 	ParentUUID  string `json:"parentUuid" `
 	Group       bool   `json:"group"`
 	Image       string `json:"image"`
+	Description string `json:"description"`
 	MeasureName string `json:"measureName,omitempty"`
 	Price       uint64 // Цена в копейках
 }

@@ -21,5 +21,5 @@ func displayProfile(app *app.App, chatId int64, session *chat.Chat) error {
 	msg := tgbotapi.NewMessage(chatId, FormatProfileMessage(session).String())
 	msg.ReplyMarkup = MakeKeyboardProfileOrder()
 	msg.ParseMode = tgbotapi.ModeHTML
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }

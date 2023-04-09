@@ -24,7 +24,7 @@ func ClickOnChangePhone(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	requestContact.ReplyMarkup = tgbotapi.NewReplyKeyboard(tgbotapi.NewKeyboardButtonRow(
 		tgbotapi.NewKeyboardButtonContact(SEND_PHONE_BUTTON),
 	))
-	return app.Reply(requestContact)
+	return app.Bot.Reply(requestContact)
 }
 
 const (

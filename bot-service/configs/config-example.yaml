@@ -21,6 +21,21 @@ restaurant_api:
   auth:  <YOUR_API_TOKEN>
   store:  <YOUR_STORE_UUID>
 
+# Настройки внешнего API для загрузки номенклатуры
+product_api:
+  kind: "evo_api"
+  base_url: https://api.evotor.ru/stores/
+  auth:  <YOUR_API_TOKEN>
+  store: <YOUR_API_TOKEN>
+  menu_root:
+
+# Настройки внешнего API для создания заказов
+order_api:
+  kind: "order_api"
+  base_url: https://dclubs.ru/evotor/orders/api/3rdparty/v2
+  auth:  <YOUR_API_TOKEN>
+  store:  <YOUR_API_TOKEN>
+
 # настройки для отправки логов
 telemetry:
   graylogPath: 127.0.0.1:12201

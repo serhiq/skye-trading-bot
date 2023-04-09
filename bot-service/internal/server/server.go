@@ -6,12 +6,17 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/serhiq/skye-trading-bot/internal/bot/performer"
 	"github.com/serhiq/skye-trading-bot/internal/config"
+	"github.com/serhiq/skye-trading-bot/internal/contorller"
+	orderController "github.com/serhiq/skye-trading-bot/internal/contorller/order"
+	productController "github.com/serhiq/skye-trading-bot/internal/contorller/product"
+	"github.com/serhiq/skye-trading-bot/internal/delivery"
+	evoClient "github.com/serhiq/skye-trading-bot/internal/delivery/evotor"
+	orderClient "github.com/serhiq/skye-trading-bot/internal/delivery/orders"
+	restoranClient "github.com/serhiq/skye-trading-bot/internal/delivery/resto"
 	"github.com/serhiq/skye-trading-bot/internal/logger"
 	repositoryChat "github.com/serhiq/skye-trading-bot/internal/repository/chat"
 	repositoryOrder "github.com/serhiq/skye-trading-bot/internal/repository/order"
 	repositoryProduct "github.com/serhiq/skye-trading-bot/internal/repository/product"
-	"github.com/serhiq/skye-trading-bot/internal/worker"
-	"github.com/serhiq/skye-trading-bot/pkg/restoClient"
 	"github.com/serhiq/skye-trading-bot/pkg/store/mysql"
 	"log"
 	"time"
@@ -92,33 +97,78 @@ func (s *Server) initApp() (err error) {
 		}
 		log.Print("database: close")
 	})
-
 	client := r.New()
-	evoClient := restoClient.New(client, &restoClient.Options{
-		Auth:    s.cfg.RestaurantAPI.Auth,
-		Store:   s.cfg.RestaurantAPI.Store,
-		BaseUrl: s.cfg.RestaurantAPI.BaseURL,
-	})
+	/////////////////////////////////////////////////////////////////////////////
+	orderRepo := repositoryOrder.New(s.store.Db)
 
-	var repoProduct = repositoryProduct.New(s.store.Db)
+	var orderProvider contorller.OrderSender
+	switch s.cfg.OrderAPI.Kind {
+	case config.OrderAPIKind:
+		//logger.SugaredLogger.Infow("Using Evotor Product API")
+		orderProvider = orderClient.New(client, &orderClient.Options{
+			Auth:    s.cfg.OrderAPI.Auth,
+			BaseUrl: s.cfg.OrderAPI.BaseURL,
+			Store:   s.cfg.OrderAPI.Store,
+		},
+		)
+	case config.RestoOrderAPIKind:
+		//logger.SugaredLogger.Infow("Using Restoran Order API")
+
+		orderProvider = restoranClient.New(client, &restoranClient.Options{
+			Auth:    s.cfg.ProductAPI.Auth,
+			BaseUrl: s.cfg.ProductAPI.BaseURL,
+			Store:   s.cfg.ProductAPI.Store,
+		},
+		)
+	default:
+		return fmt.Errorf("unknown order APIr: %s", s.cfg.ProductAPI.Kind)
+	}
+
+	var orderCtrl = orderController.New(orderRepo, orderProvider)
+
+	//////////////////////////////////////////////////////////////////
+	productRepo := repositoryProduct.New(s.store.Db)
+
+	var productProvider delivery.ProductProvider
+
+	switch s.cfg.ProductAPI.Kind {
+	case config.EvotorAPIKind:
+		//logger.SugaredLogger.Info("Using Evotor Product API")
+		productProvider = evoClient.New(client, &evoClient.Options{
+			Auth:     s.cfg.ProductAPI.Auth,
+			BaseUrl:  s.cfg.ProductAPI.BaseURL,
+			Store:    s.cfg.ProductAPI.Store,
+			MenuUuid: s.cfg.ProductAPI.MenuUuid,
+		},
+		)
+	case config.RestoAPIKind:
+		//logger.SugaredLogger.Info("Using Resto Product API")
+
+		productProvider = restoranClient.New(client, &restoranClient.Options{
+			Auth:    s.cfg.ProductAPI.Auth,
+			BaseUrl: s.cfg.ProductAPI.BaseURL,
+			Store:   s.cfg.ProductAPI.Store,
+		},
+		)
+	default:
+		return fmt.Errorf("unknown ProductApiKind: %s", s.cfg.ProductAPI.Kind)
+	}
+
+	productCtrl := productController.New(productRepo, productProvider, r.New())
 	var repoChat = repositoryChat.New(s.store.Db)
-	var repoOrder = repositoryOrder.New(evoClient, s.store.Db)
-
-	syncWorker := worker.New(repoProduct, evoClient, r.New())
-
 	s.addStartDelegate(func() {
-		logger.SugaredLogger.Infow(worker.LOG_TAG + "  start")
-		syncWorker.EnqueueUniquePeriodicWork()
+		//logger.SugaredLogger.Info(worker.LOG_TAG + "  start")
+		productCtrl.StartSync()
 	})
 
 	s.addStopDelegate(func() {
-		logger.SugaredLogger.Infow(worker.LOG_TAG + "  stop")
-		syncWorker.Stop()
+		productCtrl.StopSync()
+		//logger.SugaredLogger.Info(worker.LOG_TAG + "  stop")
 	})
 
 	sBot, err := performer.New(performer.Options{
 		Token: s.cfg.Telegram.Token,
-	}, repoProduct, repoChat, repoOrder)
+	}, productCtrl, repoChat, orderCtrl)
 
 	if err != nil {
 		logger.SugaredLogger.Panicw("initApp: cannot initialize Bot", "err", err)
@@ -129,12 +179,12 @@ func (s *Server) initApp() (err error) {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = longPollTimeout
 
-	updates := s.delivery.App.Bot.GetUpdatesChan(u)
+	updates := s.delivery.App.Bot.Api.GetUpdatesChan(u)
 	time.Sleep(time.Millisecond * 500)
 	updates.Clear()
 
 	s.addStartDelegate(func() {
-		logger.SugaredLogger.Infof("Bot online %s", s.delivery.App.Bot.Self.UserName)
+		logger.SugaredLogger.Infof("Bot online %s", s.delivery.App.Bot.Api.Self.UserName)
 		for update := range updates {
 			go s.delivery.Dispatch(&update)
 		}
@@ -142,7 +192,7 @@ func (s *Server) initApp() (err error) {
 
 	s.addStopDelegate(func() {
 		logger.SugaredLogger.Info("Bot is stopping...")
-		s.delivery.App.Bot.StopReceivingUpdates()
+		s.delivery.App.Bot.Api.StopReceivingUpdates()
 	})
 
 	return nil

@@ -13,20 +13,20 @@ func DisplayMenuHandler(app *app.App, message *tgbotapi.Message) error {
 
 	menuMsg := tgbotapi.NewMessage(message.Chat.ID, SELECT_CATEGORY_MESSAGE)
 
-	items, err := app.RepoProduct.GetMenuItemByParent("")
+	items, err := app.ProductController.GetProductByParent("")
 	if err != nil {
 		return fmt.Errorf("Failed to get menu  %s", err)
 	}
 	keyboard := Keyboard(items, true)
 	menuMsg.ReplyMarkup = keyboard
-	return app.Reply(menuMsg)
+	return app.Bot.Reply(menuMsg)
 }
 
 ///////////////////////////////////////////////////////////
 
 func ClickOnItemCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var c = commands.New(callback.Data)
-	menuItem, err := app.RepoProduct.GetMenu(c.Uuid)
+	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
 		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
 	}
@@ -50,7 +50,7 @@ func ClickOnItemCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) 
 		} else {
 
 			var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
-			err := app.Reply(deleteMsg)
+			err := app.Bot.Reply(deleteMsg)
 			if err != nil {
 				fmt.Printf("error delete message: %s", err)
 			}
@@ -65,13 +65,13 @@ func ClickOnItemCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) 
 			photoConfig.ReplyMarkup = keyboard
 			photoConfig.ParseMode = tgbotapi.ModeHTML
 
-			return app.Reply(photoConfig)
+			return app.Bot.Reply(photoConfig)
 		}
 	}
 
 	msg := tgbotapi.NewEditMessageTextAndMarkup(session.ChatId, callback.Message.MessageID, text, keyboard)
 	msg.ParseMode = tgbotapi.ModeHTML
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }
 
 func MakePositionKeyboard(menuItem *product.Product) tgbotapi.InlineKeyboardMarkup {
@@ -89,13 +89,13 @@ func MakePositionKeyboard(menuItem *product.Product) tgbotapi.InlineKeyboardMark
 
 func ClickOnFolderCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var c = commands.New(callback.Data)
-	var items, err = app.RepoProduct.GetMenuItemByParent(c.Uuid)
+	var items, err = app.ProductController.GetProductByParent(c.Uuid)
 	if err != nil {
 		return fmt.Errorf("Failed to get menu  %s", err)
 	}
 
 	var keyboard = Keyboard(items, c.Uuid == "")
-	return app.Reply(tgbotapi.NewEditMessageReplyMarkup(callback.Message.Chat.ID, callback.Message.MessageID, keyboard))
+	return app.Bot.Reply(tgbotapi.NewEditMessageReplyMarkup(callback.Message.Chat.ID, callback.Message.MessageID, keyboard))
 }
 
 ///////////////////////////////////
@@ -103,14 +103,14 @@ func ClickOnFolderCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery
 func ClickOnBackInFolderCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) error {
 
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
-	err := app.Reply(deleteMsg)
+	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
 		fmt.Printf("error delete message: %s", err)
 	}
 
 	var c = commands.New(callback.Data)
 
-	items, err := app.RepoProduct.GetMenuItemByParent(c.Uuid)
+	items, err := app.ProductController.GetProductByParent(c.Uuid)
 	if err != nil {
 		return fmt.Errorf("Failed to get menu  %s", err)
 	}
@@ -119,5 +119,5 @@ func ClickOnBackInFolderCallbackHandler(app *app.App, callback *tgbotapi.Callbac
 
 	msg := tgbotapi.NewMessage(callback.Message.Chat.ID, SELECT_CATEGORY_MESSAGE)
 	msg.ReplyMarkup = keyboard
-	return app.Reply(msg)
+	return app.Bot.Reply(msg)
 }

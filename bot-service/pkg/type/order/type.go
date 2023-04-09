@@ -10,9 +10,12 @@ import (
 )
 
 type Order struct {
-	ID       string
-	Contacts struct {
+	ID         string // id
+	Number     string //номер, читаемвый для людей
+	ExternalID string //внешний id, uuid от api
+	Contacts   struct {
 		Phone string
+		Name  string
 	}
 	Positions []Position
 	State     string

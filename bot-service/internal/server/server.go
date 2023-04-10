@@ -27,15 +27,18 @@ const (
 )
 
 type Server struct {
-	cfg       config.Config
-	store     *mysql.Store
-	delivery  *performer.Performer
-	startFunc []func()
-	stopFunc  []func()
+	cfg               config.Config
+	store             *mysql.Store
+	delivery          *performer.Performer
+	startFunc         []func()
+	stopFunc          []func()
+	orderController   contorller.OrderController
+	productController contorller.ProductController
+	sessionRepository *repositoryChat.Repository
 }
 
 func Serve(cfg config.Config) (*Server, error) {
-	var server = &Server{
+	var s = &Server{
 		cfg:       cfg,
 		store:     nil,
 		delivery:  nil,
@@ -43,12 +46,18 @@ func Serve(cfg config.Config) (*Server, error) {
 		stopFunc:  nil,
 	}
 
-	err := server.initApp()
-	if err != nil {
-		return nil, err
+	for _, init := range []func() error{
+		s.initDb,
+		s.initOrderController,
+		s.initProductController,
+		s.initSessionRepository,
+		s.initBot,
+	} {
+		if err := init(); err != nil {
+			return nil, err
+		}
 	}
-
-	return server, nil
+	return s, nil
 }
 
 func (s *Server) Start() error {
@@ -67,67 +76,26 @@ func (s *Server) Stop() {
 	}
 }
 
-func (s *Server) initApp() (err error) {
+func (s *Server) initSessionRepository() error {
 
-	store, err := mysql.New(s.cfg.DBConfig)
-
-	if err != nil {
-		panic(err)
-	}
-
-	s.store = store
-
-	err = store.Db.AutoMigrate(&repositoryChat.Chat{}, &repositoryProduct.Product{}, &repositoryOrder.Order{}, &repositoryOrder.OrderPosition{})
+	err := s.store.Db.AutoMigrate(&repositoryChat.Chat{})
 	if err != nil {
 		return err
 	}
 
-	s.addStopDelegate(func() {
-		log.Println("db stop func")
+	s.sessionRepository = repositoryChat.New(s.store.Db)
+	return nil
+}
 
-		db, err := s.store.Db.DB()
-		if err != nil {
-			log.Printf("database: error close database, %s", err)
-			return
-		}
-		err = db.Close()
-		if err != nil {
-			log.Printf("database: error close database, %s", err)
-			return
-		}
-		log.Print("database: close")
-	})
-	client := r.New()
-	/////////////////////////////////////////////////////////////////////////////
-	orderRepo := repositoryOrder.New(s.store.Db)
+func (s *Server) initProductController() error {
 
-	var orderProvider contorller.OrderSender
-	switch s.cfg.OrderAPI.Kind {
-	case config.OrderAPIKind:
-		//logger.SugaredLogger.Infow("Using Evotor Product API")
-		orderProvider = orderClient.New(client, &orderClient.Options{
-			Auth:    s.cfg.OrderAPI.Auth,
-			BaseUrl: s.cfg.OrderAPI.BaseURL,
-			Store:   s.cfg.OrderAPI.Store,
-		},
-		)
-	case config.RestoOrderAPIKind:
-		//logger.SugaredLogger.Infow("Using Restoran Order API")
-
-		orderProvider = restoranClient.New(client, &restoranClient.Options{
-			Auth:    s.cfg.ProductAPI.Auth,
-			BaseUrl: s.cfg.ProductAPI.BaseURL,
-			Store:   s.cfg.ProductAPI.Store,
-		},
-		)
-	default:
-		return fmt.Errorf("unknown order APIr: %s", s.cfg.ProductAPI.Kind)
+	err := s.store.Db.AutoMigrate(&repositoryProduct.Product{})
+	if err != nil {
+		return err
 	}
 
-	var orderCtrl = orderController.New(orderRepo, orderProvider)
-
-	//////////////////////////////////////////////////////////////////
 	productRepo := repositoryProduct.New(s.store.Db)
+	client := r.New()
 
 	var productProvider delivery.ProductProvider
 
@@ -155,7 +123,6 @@ func (s *Server) initApp() (err error) {
 	}
 
 	productCtrl := productController.New(productRepo, productProvider, r.New())
-	var repoChat = repositoryChat.New(s.store.Db)
 	s.addStartDelegate(func() {
 		//logger.SugaredLogger.Info(worker.LOG_TAG + "  start")
 		productCtrl.StartSync()
@@ -166,9 +133,85 @@ func (s *Server) initApp() (err error) {
 		//logger.SugaredLogger.Info(worker.LOG_TAG + "  stop")
 	})
 
+	s.productController = productCtrl
+	return nil
+}
+
+func (s *Server) initOrderController() error {
+	err := s.store.Db.AutoMigrate(&repositoryOrder.Order{}, &repositoryOrder.OrderPosition{})
+	if err != nil {
+		return err
+	}
+
+	client := r.New()
+	orderRepo := repositoryOrder.New(s.store.Db)
+
+	var orderProvider contorller.OrderSender
+	switch s.cfg.OrderAPI.Kind {
+	case config.OrderAPIKind:
+		//logger.SugaredLogger.Infow("Using Evotor Product API")
+		orderProvider = orderClient.New(client, &orderClient.Options{
+			Auth:    s.cfg.OrderAPI.Auth,
+			BaseUrl: s.cfg.OrderAPI.BaseURL,
+			Store:   s.cfg.OrderAPI.Store,
+		},
+		)
+	case config.RestoOrderAPIKind:
+		//logger.SugaredLogger.Infow("Using Restoran Order API")
+
+		orderProvider = restoranClient.New(client, &restoranClient.Options{
+			Auth:    s.cfg.ProductAPI.Auth,
+			BaseUrl: s.cfg.ProductAPI.BaseURL,
+			Store:   s.cfg.ProductAPI.Store,
+		},
+		)
+	default:
+		return fmt.Errorf("unknown order APIr: %s", s.cfg.ProductAPI.Kind)
+	}
+
+	s.orderController = orderController.New(orderRepo, orderProvider)
+	return nil
+}
+
+func (s *Server) initDb() error {
+	store, err := mysql.New(s.cfg.DBConfig)
+
+	if err != nil {
+		panic(err)
+	}
+
+	s.store = store
+
+	s.addStopDelegate(func() {
+		log.Println("db stop func")
+
+		db, err := s.store.Db.DB()
+		if err != nil {
+			log.Printf("database: error close database, %s", err)
+			return
+		}
+		err = db.Close()
+		if err != nil {
+			log.Printf("database: error close database, %s", err)
+			return
+		}
+		log.Print("database: close")
+	})
+	return err
+}
+
+func (s *Server) addStartDelegate(delegate func()) {
+	s.startFunc = append(s.startFunc, delegate)
+}
+
+func (s *Server) addStopDelegate(delegate func()) {
+	s.stopFunc = append(s.stopFunc, delegate)
+}
+
+func (s *Server) initBot() error {
 	sBot, err := performer.New(performer.Options{
 		Token: s.cfg.Telegram.Token,
-	}, productCtrl, repoChat, orderCtrl)
+	}, s.productController, s.sessionRepository, s.orderController)
 
 	if err != nil {
 		logger.SugaredLogger.Panicw("initApp: cannot initialize Bot", "err", err)
@@ -196,12 +239,4 @@ func (s *Server) initApp() (err error) {
 	})
 
 	return nil
-}
-
-func (s *Server) addStartDelegate(delegate func()) {
-	s.startFunc = append(s.startFunc, delegate)
-}
-
-func (s *Server) addStopDelegate(delegate func()) {
-	s.stopFunc = append(s.stopFunc, delegate)
 }

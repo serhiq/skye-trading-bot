@@ -43,12 +43,21 @@ func CancelProfile() *commands.UserCommand {
 	}
 }
 
-func MakeKeyboardProfileOrder() tgbotapi.InlineKeyboardMarkup {
+func MakeKeyboardProfileOrder() (tgbotapi.InlineKeyboardMarkup, error) {
+
+	changePhone, err := SetChangePhone().ToJson()
+	changeName, err := SetChangeName().ToJson()
+	cancelProfile, err := CancelProfile().ToJson()
+
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
 	return tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_PHONE_BUTTON, SetChangePhone().ToJson())),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_NAME_BUTTON, SetChangeName().ToJson())),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CANCEL_PROFILE_BUTTON, CancelProfile().ToJson())),
-	)
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_PHONE_BUTTON, changePhone)),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_NAME_BUTTON, changeName)),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CANCEL_PROFILE_BUTTON, cancelProfile)),
+	), nil
 }
 
 func FormatProfileMessage(session *chat.Chat) *strings.Builder {

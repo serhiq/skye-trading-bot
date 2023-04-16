@@ -23,7 +23,11 @@ func CreateOrderHandler(app *app.App, message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, DELIVERY_METHOD_QUESTION)
 
-	msg.ReplyMarkup = MakeKeyboardDeliveryMethod()
+	keyboard, err := MakeKeyboardDeliveryMethod()
+	if err != nil {
+		return err
+	}
+	msg.ReplyMarkup = keyboard
 
 	return app.Bot.Reply(msg)
 }
@@ -67,7 +71,13 @@ func ClickOnSetDeliveryCallbackHandler(app *app.App, callback *tgbotapi.Callback
 		}
 
 		msg := tgbotapi.NewMessage(callback.Message.Chat.ID, TIME_PICKUP_QUESTION)
-		msg.ReplyMarkup = KeyboardDeliveryTime()
+		keyboard, err := KeyboardDeliveryTime()
+		if err != nil {
+			return err
+		}
+
+		msg.ReplyMarkup = keyboard
+
 		return app.Bot.Reply(msg)
 	}
 

@@ -44,11 +44,18 @@ func SetCancelOrder() *commands.UserCommand {
 	}
 }
 
-func MakeKeyboardConfirmOrder() tgbotapi.InlineKeyboardMarkup {
+func MakeKeyboardConfirmOrder() (tgbotapi.InlineKeyboardMarkup, error) {
+	confirm, err := SetConfirmOrder().ToJson()
+	cancel, err := SetCancelOrder().ToJson()
+
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
 	return tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(BUTTON_CONFIRM_ORDER, SetConfirmOrder().ToJson())),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(BUTTON_CANCEL_ORDER, SetCancelOrder().ToJson())),
-	)
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(BUTTON_CONFIRM_ORDER, confirm)),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(BUTTON_CANCEL_ORDER, cancel)),
+	), nil
 }
 
 func FormatDisplayConfirm(session *chat.Chat, order *order.Order) *strings.Builder {

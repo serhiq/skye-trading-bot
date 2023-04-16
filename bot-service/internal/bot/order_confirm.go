@@ -23,7 +23,12 @@ func DisplayOrderConfirm(app *app.App, chatId int64) error {
 	//msg := tgbotapi.NewMessage(session.ChatId, ms)
 
 	msg.ParseMode = tgbotapi.ModeHTML
-	msg.ReplyMarkup = MakeKeyboardConfirmOrder()
+	keyboard, err := MakeKeyboardConfirmOrder()
+	if err != nil {
+		return err
+	}
+
+	msg.ReplyMarkup = keyboard
 
 	return app.Bot.Reply(msg)
 }

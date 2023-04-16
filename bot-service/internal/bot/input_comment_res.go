@@ -20,8 +20,12 @@ func SetNoComment() *commands.UserCommand {
 	}
 }
 
-func KeyboardComment() tgbotapi.InlineKeyboardMarkup {
+func KeyboardComment() (tgbotapi.InlineKeyboardMarkup, error) {
+	jsonCommand, err := SetNoComment().ToJson()
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
 	return tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(NO_COMMENT_BUTTON, SetNoComment().ToJson())),
-	)
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(NO_COMMENT_BUTTON, jsonCommand)),
+	), nil
 }

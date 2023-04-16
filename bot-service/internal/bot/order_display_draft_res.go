@@ -6,16 +6,21 @@ import (
 	"github.com/serhiq/skye-trading-bot/pkg/type/order"
 )
 
-func MakeEditOrderKeyboard(order *order.Order) tgbotapi.InlineKeyboardMarkup {
+func MakeEditOrderKeyboard(order *order.Order) (tgbotapi.InlineKeyboardMarkup, error) {
 	rows := [][]tgbotapi.InlineKeyboardButton{}
 
 	for _, p := range order.Positions {
-		rows = append(rows, tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(p.ProductName, ClickOnEditPosition(p.ProductUUID).ToJson())))
+		command, err := ClickOnEditPosition(p.ProductUUID).ToJson()
+		if err != nil {
+			return tgbotapi.InlineKeyboardMarkup{}, err
+		}
+
+		rows = append(rows, tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(p.ProductName, command)))
 	}
 
 	return tgbotapi.NewInlineKeyboardMarkup(
 		rows...,
-	)
+	), nil
 }
 
 func ClickOnEditPosition(uuid string) *commands.UserCommand {

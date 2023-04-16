@@ -29,11 +29,18 @@ func SetPickup() *commands.UserCommand {
 	}
 }
 
-func MakeKeyboardDeliveryMethod() tgbotapi.InlineKeyboardMarkup {
+func MakeKeyboardDeliveryMethod() (tgbotapi.InlineKeyboardMarkup, error) {
+	delivery, err := SetDelivery().ToJson()
+	pickup, err := SetPickup().ToJson()
+
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
 	return tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(DELIVERY_BUTTON, SetDelivery().ToJson())),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(SELF_PICKUP_BUTTON, SetPickup().ToJson())),
-	)
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(DELIVERY_BUTTON, delivery)),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(SELF_PICKUP_BUTTON, pickup)),
+	), nil
 }
 
 func FormantDescription(command string) string {

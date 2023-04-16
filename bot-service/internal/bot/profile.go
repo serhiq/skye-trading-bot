@@ -19,7 +19,13 @@ func ProfileMenuHandler(app *app.App, message *tgbotapi.Message) error {
 
 func displayProfile(app *app.App, chatId int64, session *chat.Chat) error {
 	msg := tgbotapi.NewMessage(chatId, FormatProfileMessage(session).String())
-	msg.ReplyMarkup = MakeKeyboardProfileOrder()
+
+	keyboard, err := MakeKeyboardProfileOrder()
+	if err != nil {
+		return err
+	}
+
+	msg.ReplyMarkup = keyboard
 	msg.ParseMode = tgbotapi.ModeHTML
 	return app.Bot.Reply(msg)
 }

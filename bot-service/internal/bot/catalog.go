@@ -17,7 +17,11 @@ func DisplayMenuHandler(app *app.App, message *tgbotapi.Message) error {
 	if err != nil {
 		return fmt.Errorf("Failed to get menu  %s", err)
 	}
-	keyboard := Keyboard(items, true)
+	keyboard, err := Keyboard(items, true)
+	if err != nil {
+		return err
+	}
+
 	menuMsg.ReplyMarkup = keyboard
 	return app.Bot.Reply(menuMsg)
 }
@@ -34,12 +38,15 @@ func ClickOnItemCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
 		return fmt.Errorf("Failed to get chat  %s", err)
-
 	}
 	count := session.GetDraftOrder().CounterPosition(menuItem.UUID)
 
 	text := FormatMenuItem(menuItem, count)
-	var keyboard = MakePositionKeyboard(menuItem)
+
+	keyboard, err := MakePositionKeyboard(menuItem)
+	if err != nil {
+		return err
+	}
 
 	if menuItem.UUID != "" {
 		src := "./imageCache/" + menuItem.UUID
@@ -74,15 +81,22 @@ func ClickOnItemCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) 
 	return app.Bot.Reply(msg)
 }
 
-func MakePositionKeyboard(menuItem *product.Product) tgbotapi.InlineKeyboardMarkup {
+func MakePositionKeyboard(menuItem *product.Product) (tgbotapi.InlineKeyboardMarkup, error) {
+	addCommand, err := AddPosition(menuItem.UUID).ToJson()
+	decreaseCommand, err := DecreasePosition(menuItem.UUID).ToJson()
+	backCommand, err := ClickOnBackInFolder(menuItem.ParentUUID).ToJson()
+
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData(formatMenuItemBtn(INCREASE_POSITION_BUTTON, menuItem), AddPosition(menuItem.UUID).ToJson()),
-			tgbotapi.NewInlineKeyboardButtonData(formatMenuItemBtn(DECREASE_POSITION_BUTTON, menuItem), DecreasePosition(menuItem.UUID).ToJson()),
+			tgbotapi.NewInlineKeyboardButtonData(formatMenuItemBtn(INCREASE_POSITION_BUTTON, menuItem), addCommand),
+			tgbotapi.NewInlineKeyboardButtonData(formatMenuItemBtn(DECREASE_POSITION_BUTTON, menuItem), decreaseCommand),
 		),
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData("<< Назад", ClickOnBackInFolder(menuItem.ParentUUID).ToJson()),
-		))
+			tgbotapi.NewInlineKeyboardButtonData("<< Назад", backCommand),
+		)), nil
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +108,10 @@ func ClickOnFolderCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery
 		return fmt.Errorf("Failed to get menu  %s", err)
 	}
 
-	var keyboard = Keyboard(items, c.Uuid == "")
+	keyboard, err := Keyboard(items, c.Uuid == "")
+	if err != nil {
+		return err
+	}
 	return app.Bot.Reply(tgbotapi.NewEditMessageReplyMarkup(callback.Message.Chat.ID, callback.Message.MessageID, keyboard))
 }
 
@@ -115,7 +132,10 @@ func ClickOnBackInFolderCallbackHandler(app *app.App, callback *tgbotapi.Callbac
 		return fmt.Errorf("Failed to get menu  %s", err)
 	}
 
-	var keyboard = Keyboard(items, c.Uuid == "")
+	keyboard, err := Keyboard(items, c.Uuid == "")
+	if err != nil {
+		return err
+	}
 
 	msg := tgbotapi.NewMessage(callback.Message.Chat.ID, SELECT_CATEGORY_MESSAGE)
 	msg.ReplyMarkup = keyboard

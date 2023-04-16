@@ -46,6 +46,11 @@ func ClickOnSetTimeCallback(app *app.App, callback *tgbotapi.CallbackQuery) erro
 
 	msg = tgbotapi.NewMessage(callback.Message.Chat.ID, ASK_COMMENT)
 
-	msg.ReplyMarkup = KeyboardComment()
+	keyboard, err := KeyboardComment()
+	if err != nil {
+		return err
+	}
+
+	msg.ReplyMarkup = keyboard
 	return app.Bot.Reply(msg)
 }

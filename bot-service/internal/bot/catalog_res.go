@@ -33,29 +33,44 @@ func ClickOnProductItem(uuid string) *c.UserCommand {
 	}
 }
 
-func Keyboard(menuitems []*product.Product, isRoot bool) tgbotapi.InlineKeyboardMarkup {
+func Keyboard(menuitems []*product.Product, isRoot bool) (tgbotapi.InlineKeyboardMarkup, error) {
 	buttons := []tgbotapi.InlineKeyboardButton{}
 
 	for _, menuitem := range menuitems {
+		var title, command string
+		var err error
 		if menuitem.Group {
-			buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("🗀  "+menuitem.Name, ClickOnFolder(menuitem.UUID).ToJson()))
+			command, err = ClickOnFolder(menuitem.UUID).ToJson()
+			title = "🗀  " + menuitem.Name
 		} else {
-			buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData(menuitem.Name+" - "+_type.FormatPriceWithCurrency(menuitem.Price), ClickOnProductItem(menuitem.UUID).ToJson()))
+			command, err = ClickOnProductItem(menuitem.UUID).ToJson()
+			title = menuitem.Name + " - " + _type.FormatPriceWithCurrency(menuitem.Price)
 		}
+
+		if err != nil {
+			return tgbotapi.InlineKeyboardMarkup{}, err
+		}
+
+		buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData(title, command))
 	}
 
 	rows := chunkSlice(buttons, calculateColums(menuitems))
 
+	command, err := ClickOnFolder("").ToJson()
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
 	if !isRoot {
 		backButtons := []tgbotapi.InlineKeyboardButton{}
-		backButtons = append(backButtons, tgbotapi.NewInlineKeyboardButtonData("<< Назад", ClickOnFolder("").ToJson()))
+		backButtons = append(backButtons, tgbotapi.NewInlineKeyboardButtonData("<< Назад", command))
 
 		rows = append(rows, backButtons)
 	}
 
 	return tgbotapi.NewInlineKeyboardMarkup(
 		rows...,
-	)
+	), nil
 }
 
 func calculateColums(menuitems []*product.Product) int {

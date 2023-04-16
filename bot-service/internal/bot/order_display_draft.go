@@ -76,7 +76,12 @@ func displayPositionEditMenu(app *app.App, productUuid string, chatId int64, mes
 	//4шт. x 550 = 2200 ₽
 	var title = fmt.Sprintf("%s\n%d x %s = %s", position.ProductName, position.Quantity, _type.FormatPrice(position.PriceWithDiscount), _type.FormatPriceWithCurrency(totalPosition))
 
-	msg := tgbotapi.NewEditMessageTextAndMarkup(session.ChatId, messageId, title, MakePositionEditKeyboard(menuItem.UUID))
+	keyboard, err := MakePositionEditKeyboard(menuItem.UUID)
+	if err != nil {
+		return err
+	}
+
+	msg := tgbotapi.NewEditMessageTextAndMarkup(session.ChatId, messageId, title, keyboard)
 	return app.Bot.Reply(msg)
 }
 
@@ -115,9 +120,11 @@ func DisplayEditOrder(app *app.App, ChatId int64) (string, *tgbotapi.InlineKeybo
 		//return app.Reply(msg)
 	}
 
-	posMsg := tgbotapi.NewMessage(session.ChatId, TEXT_EDIT_QUANTITY_MESSAGE)
-	editKeyboard := MakeEditOrderKeyboard(order)
-	posMsg.ReplyMarkup = editKeyboard
+	//posMsg := tgbotapi.NewMessage(session.ChatId, TEXT_EDIT_QUANTITY_MESSAGE)
+	editKeyboard, err := MakeEditOrderKeyboard(order)
+	if err != nil {
+		return "", nil, err
+	}
 
 	return TEXT_EDIT_QUANTITY_MESSAGE, &editKeyboard, nil
 }

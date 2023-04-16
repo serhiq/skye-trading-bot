@@ -35,10 +35,18 @@ func SetTimeSoonest() *commands.UserCommand {
 	}
 }
 
-func KeyboardDeliveryTime() tgbotapi.InlineKeyboardMarkup {
+func KeyboardDeliveryTime() (tgbotapi.InlineKeyboardMarkup, error) {
+	soonest, err := SetTimeSoonest().ToJson()
+	delivery40, err := SetTime40().ToJson()
+	delivery120, err := SetTime120().ToJson()
+
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
 	return tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(SOONEST_DELIVERY_BUTTON, SetTimeSoonest().ToJson())),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(DELIVERY_IN_40MINS_BUTTON, SetTime40().ToJson())),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(DELIVERY_IN_120MINS_BUTTON, SetTime120().ToJson())),
-	)
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(SOONEST_DELIVERY_BUTTON, soonest)),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(DELIVERY_IN_40MINS_BUTTON, delivery40)),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(DELIVERY_IN_120MINS_BUTTON, delivery120)),
+	), nil
 }

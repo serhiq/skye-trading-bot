@@ -50,7 +50,7 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 	count := order.CounterPosition(menuItem.UUID)
 
 	text := FormatMenuItem(menuItem, count)
-	var keyboard = MakePositionKeyboard(menuItem)
+	keyboard, err := MakePositionKeyboard(menuItem)
 
 	if callback.Message.Caption != "" {
 		editor := tgbotapi.NewEditMessageCaption(session.ChatId, callback.Message.MessageID, text)
@@ -113,7 +113,10 @@ func ClickOnIncreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 	count := order.CounterPosition(menuItem.UUID)
 
 	text := FormatMenuItem(menuItem, count)
-	var keyboard = MakePositionKeyboard(menuItem)
+	keyboard, err := MakePositionKeyboard(menuItem)
+	if err != nil {
+		return err
+	}
 
 	if callback.Message.Caption != "" {
 		editor := tgbotapi.NewEditMessageCaption(session.ChatId, callback.Message.MessageID, text)

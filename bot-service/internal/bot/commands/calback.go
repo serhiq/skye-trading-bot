@@ -2,6 +2,7 @@ package commands
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 type UserCommand struct {
@@ -18,12 +19,12 @@ func New(str string) *UserCommand {
 	return u
 }
 
-func (c *UserCommand) ToJson() string {
+func (c *UserCommand) ToJson() (string, error) {
 	bytes, err := json.Marshal(c)
 	if err != nil {
-		panic(err)
+		return "", fmt.Errorf("failed to marshal object to JSON: %#v", err)
 	}
-	return string(bytes)
+	return string(bytes), nil
 }
 
 func (c *UserCommand) IsNotEmpty() bool {

@@ -45,15 +45,24 @@ const (
 	TEXT_EDIT_QUANTITY_MESSAGE = "Выберите товар, чтобы изменить количество:"
 )
 
-func MakePositionEditKeyboard(productUuid string) tgbotapi.InlineKeyboardMarkup {
+func MakePositionEditKeyboard(productUuid string) (tgbotapi.InlineKeyboardMarkup, error) {
+
+	addCommand, err := AddPositionOrder(productUuid).ToJson()
+	decreaseCommand, err := DecreasePositionOrder(productUuid).ToJson()
+	backCommand, err := ClickOnBackEditOrder().ToJson()
+
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData("+", AddPositionOrder(productUuid).ToJson()),
-			tgbotapi.NewInlineKeyboardButtonData("-", DecreasePositionOrder(productUuid).ToJson()),
+			tgbotapi.NewInlineKeyboardButtonData("+", addCommand),
+			tgbotapi.NewInlineKeyboardButtonData("-", decreaseCommand),
 		),
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData("<< Назад", ClickOnBackEditOrder().ToJson()),
-		))
+			tgbotapi.NewInlineKeyboardButtonData("<< Назад", backCommand),
+		)), nil
 }
 
 func ClickOnBackEditOrder() *commands.UserCommand {

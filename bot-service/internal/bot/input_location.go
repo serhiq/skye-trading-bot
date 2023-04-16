@@ -25,7 +25,13 @@ func InputLocationHandler(app *app.App, input string, session *chat.Chat) error 
 		}
 
 		msg := tgbotapi.NewMessage(session.ChatId, TIME_QUESTION)
-		msg.ReplyMarkup = KeyboardDeliveryTime()
+
+		keyboard, err := KeyboardDeliveryTime()
+		if err != nil {
+			return err
+		}
+
+		msg.ReplyMarkup = keyboard
 		return app.Bot.Reply(msg)
 
 	} else {

@@ -8,6 +8,7 @@ require (
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
+	github.com/pkg/errors v0.8.1
 	github.com/snovichkov/zap-gelf v1.3.0
 	github.com/softc24/evotor-resto-go v1.0.1
 	go.uber.org/zap v1.24.0

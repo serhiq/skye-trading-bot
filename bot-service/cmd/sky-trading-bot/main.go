@@ -20,20 +20,20 @@ func main() {
 		log.Panic(err)
 	}
 
+	err = logger.InitLogger(*cfg)
+	defer logger.Sync()
+
 	s, err := server.Serve(*cfg)
 	if err != nil {
 		log.Panic(err)
 	}
-
-	err = logger.InitLogger(*cfg)
-	defer logger.Sync()
 
 	exit := make(chan os.Signal, 1)
 	signal.Notify(exit, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	go func() {
 		sig := <-exit
 		logger.SugaredLogger.Info(fmt.Sprintf("Exit. %s  received.", sig.String()))
-		fmt.Printf("\n Goroutines: %d", runtime.NumGoroutine())
+		fmt.Printf("\n\n Goroutines: %d \n", runtime.NumGoroutine())
 
 		s.Stop()
 		fmt.Println("Shutdown server")

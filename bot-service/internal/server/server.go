@@ -4,6 +4,7 @@ import (
 	"fmt"
 	r "github.com/go-resty/resty/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/pkg/errors"
 	"github.com/serhiq/skye-trading-bot/internal/bot/performer"
 	"github.com/serhiq/skye-trading-bot/internal/config"
 	"github.com/serhiq/skye-trading-bot/internal/contorller"
@@ -54,7 +55,7 @@ func Serve(cfg config.Config) (*Server, error) {
 		s.initBot,
 	} {
 		if err := init(); err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "serve failed")
 		}
 	}
 	return s, nil
@@ -166,7 +167,7 @@ func (s *Server) initOrderController() error {
 		},
 		)
 	default:
-		return fmt.Errorf("unknown order APIr: %s", s.cfg.ProductAPI.Kind)
+		return fmt.Errorf("unknown order API %s", s.cfg.ProductAPI.Kind)
 	}
 
 	s.orderController = orderController.New(orderRepo, orderProvider)
@@ -177,14 +178,12 @@ func (s *Server) initDb() error {
 	store, err := mysql.New(s.cfg.DBConfig)
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	s.store = store
 
 	s.addStopDelegate(func() {
-		log.Println("db stop func")
-
 		db, err := s.store.Db.DB()
 		if err != nil {
 			log.Printf("database: error close database, %s", err)
@@ -214,7 +213,7 @@ func (s *Server) initBot() error {
 	}, s.productController, s.sessionRepository, s.orderController)
 
 	if err != nil {
-		logger.SugaredLogger.Panicw("initApp: cannot initialize Bot", "err", err)
+		return errors.Wrap(err, "cannot initialize Bot")
 	}
 
 	s.delivery = sBot

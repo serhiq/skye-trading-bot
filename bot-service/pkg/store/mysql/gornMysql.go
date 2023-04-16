@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 	"github.com/serhiq/skye-trading-bot/internal/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -27,17 +28,17 @@ func New(s config.DBConfig) (*Store, error) {
 	db, err := gorm.Open(mysql.Open(dsn), cfg)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "unable initialize db session")
 	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "unable get connection pull")
 	}
 
 	err = sqlDB.Ping()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "unable to ping DB")
 	}
 
 	return &Store{Db: db}, nil

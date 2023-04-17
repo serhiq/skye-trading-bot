@@ -7,12 +7,15 @@ import (
 	"github.com/serhiq/skye-trading-bot/pkg/type/product"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Order struct {
 	ID         string // id
 	Number     string //номер, читаемвый для людей
 	ExternalID string //внешний id, uuid от api
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 	Contacts   struct {
 		Phone string
 		Name  string
@@ -161,6 +164,10 @@ func (c *Order) OrderDescriptionNew() string {
 	return b.String()
 }
 
+func (c *Order) ConvertUpdatedAtToString() string {
+	return c.UpdatedAt.Format("02.01.2006")
+}
+
 func (c *Order) ToJson() (string, error) {
 	bytes, err := json.Marshal(c)
 	if err != nil {
@@ -182,4 +189,18 @@ func (c *Order) FindPosition(uuid string) *Position {
 		}
 	}
 	return nil
+}
+
+func (c *Order) StateDescription() string {
+	switch c.State {
+	case "new":
+		return "ждет оплаты"
+	case "paid":
+		return "оплачен"
+	case "done":
+		return "выполнен"
+	case "canceled":
+		return "отменен"
+	}
+	return c.State
 }

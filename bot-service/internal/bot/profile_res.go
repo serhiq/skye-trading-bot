@@ -10,6 +10,7 @@ import (
 const (
 	CHANGE_PHONE_BUTTON   = "Изменить номер телефона"
 	CHANGE_NAME_BUTTON    = "Изменить Имя"
+	HISTORY_BUTTON        = "История заказов"
 	CANCEL_PROFILE_BUTTON = "<< Назад"
 )
 
@@ -21,16 +22,24 @@ const (
 )
 
 const (
-	CHANGE_PHONE_COMMAND = "ch_phone"
-	CHANGE_NAME_COMMAND  = "ch_name"
-	CANCEL_FROM_PROFILE  = "cancel_from_profile"
+	DISPLAY_HISTORY_COMMAND = "d_history"
+	CHANGE_PHONE_COMMAND    = "ch_phone"
+	CHANGE_NAME_COMMAND     = "ch_name"
+	CANCEL_FROM_PROFILE     = "cancel_from_profile"
 )
+
+func SetDisplayHistory() *commands.UserCommand {
+	return &commands.UserCommand{
+		Command: DISPLAY_HISTORY_COMMAND,
+	}
+}
 
 func SetChangePhone() *commands.UserCommand {
 	return &commands.UserCommand{
 		Command: CHANGE_PHONE_COMMAND,
 	}
 }
+
 func SetChangeName() *commands.UserCommand {
 	return &commands.UserCommand{
 		Command: CHANGE_NAME_COMMAND,
@@ -45,6 +54,7 @@ func CancelProfile() *commands.UserCommand {
 
 func MakeKeyboardProfileOrder() (tgbotapi.InlineKeyboardMarkup, error) {
 
+	history, err := SetDisplayHistory().ToJson()
 	changePhone, err := SetChangePhone().ToJson()
 	changeName, err := SetChangeName().ToJson()
 	cancelProfile, err := CancelProfile().ToJson()
@@ -54,6 +64,7 @@ func MakeKeyboardProfileOrder() (tgbotapi.InlineKeyboardMarkup, error) {
 	}
 
 	return tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(HISTORY_BUTTON, history)),
 		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_PHONE_BUTTON, changePhone)),
 		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CHANGE_NAME_BUTTON, changeName)),
 		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(CANCEL_PROFILE_BUTTON, cancelProfile)),

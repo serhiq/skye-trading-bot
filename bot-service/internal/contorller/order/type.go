@@ -9,15 +9,24 @@ import (
 )
 
 type OrderControllerImpl struct {
-	orderRepo contorller.OrderRepository
-	//orderHistoryRepo OrderHistoryRepository
-	orderSender contorller.OrderSender
+	orderRepo        contorller.OrderRepository
+	orderHistoryRepo contorller.OrderHistoryRepository
+	orderSender      contorller.OrderSender
 }
 
-func New(orderRepo contorller.OrderRepository, orderSender contorller.OrderSender) contorller.OrderController {
+func (c *OrderControllerImpl) Get(id string) (*domainOrder.Order, error) {
+	return c.orderRepo.Get(id)
+}
+
+func (c *OrderControllerImpl) GetLast(count int) ([]*domainOrder.Order, error) {
+	return c.orderHistoryRepo.GetLast(count)
+}
+
+func New(orderRepo contorller.OrderRepository, orderSender contorller.OrderSender, orderHistoryRepo contorller.OrderHistoryRepository) contorller.OrderController {
 	return &OrderControllerImpl{
-		orderRepo:   orderRepo,
-		orderSender: orderSender,
+		orderRepo:        orderRepo,
+		orderSender:      orderSender,
+		orderHistoryRepo: orderHistoryRepo,
 	}
 }
 
@@ -32,6 +41,7 @@ func (c *OrderControllerImpl) SendOrder(order *domainOrder.Order) (number string
 	}
 
 	order.ExternalID = externalUUid
+	order.State = "new"
 	err = c.orderRepo.Insert(order)
 	if err != nil {
 		return "", err

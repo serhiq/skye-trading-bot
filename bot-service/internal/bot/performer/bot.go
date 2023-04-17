@@ -262,6 +262,10 @@ func New(options Options, productController contorller.ProductController, repoCh
 
 	//профиль
 	p.AddCommandHandler(b.DISPLAY_PROFILE_BUTTON, b.ProfileMenuHandler)
+
+	p.AddCallbackHandler(b.DISPLAY_HISTORY_COMMAND, b.ProfileDisplayHistory)
+	p.AddCallbackHandler(b.CLICK_ON_REPEAT_ORDER, b.ProfileRepeatOrder)
+
 	p.AddCallbackHandler(b.CANCEL_FROM_PROFILE, b.ProfileOnCancel)
 
 	p.AddCallbackHandler(b.CHANGE_PHONE_COMMAND, b.ClickOnChangePhone)

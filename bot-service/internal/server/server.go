@@ -170,7 +170,7 @@ func (s *Server) initOrderController() error {
 		return fmt.Errorf("unknown order API %s", s.cfg.ProductAPI.Kind)
 	}
 
-	s.orderController = orderController.New(orderRepo, orderProvider)
+	s.orderController = orderController.New(orderRepo, orderProvider, orderRepo)
 	return nil
 }
 

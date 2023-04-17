@@ -3,14 +3,44 @@ package order
 import (
 	domainOrder "github.com/serhiq/skye-trading-bot/pkg/type/order"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Repository struct {
 	Db *gorm.DB
 }
 
+func (g *Repository) Get(id string) (*domainOrder.Order, error) {
+	var order Order
+	err := g.Db.Preload("Positions").First(&order, "uuid = ?", id).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return mapToDomainOrder(&order), nil
+}
+
 func (g *Repository) Insert(order *domainOrder.Order) error {
 	return g.Db.Save(mapToDatabaseOrder(order)).Error
+}
+
+func (g *Repository) GetLast(count int) ([]*domainOrder.Order, error) {
+	var orders []*Order
+	err := g.Db.Model(&Order{}).
+		Preload("Positions").
+		Order("updated_at DESC").
+		Limit(count).
+		Find(&orders).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*domainOrder.Order
+	for _, order := range orders {
+		result = append(result, mapToDomainOrder(order))
+
+	}
+	return result, nil
 }
 
 func mapToDatabaseOrder(order *domainOrder.Order) *Order {
@@ -44,6 +74,33 @@ func mapToDatabaseOrder(order *domainOrder.Order) *Order {
 
 }
 
+func mapToDomainOrder(order *Order) *domainOrder.Order {
+	positions := []domainOrder.Position{}
+
+	for _, pos := range order.Positions {
+		dbPos := domainOrder.Position{
+			ProductUUID:       pos.ProductUUID,
+			ProductName:       pos.ProductName,
+			Price:             pos.Price,
+			PriceWithDiscount: pos.PriceWithDiscount,
+			Quantity:          int(pos.Quantity),
+		}
+		positions = append(positions, dbPos)
+	}
+
+	return &domainOrder.Order{
+		ID:         order.UUID,
+		Number:     order.Number,
+		ExternalID: order.ID_EXTERNAL,
+		Positions:  positions,
+		State:      order.State,
+		Comment:    order.Comment,
+		CreatedAt:  order.Created,
+		UpdatedAt:  order.Updated,
+		Details:    domainOrder.Details{},
+	}
+}
+
 func New(Db *gorm.DB) *Repository {
 	return &Repository{
 		Db: Db,
@@ -67,8 +124,8 @@ type Order struct {
 	UUID        string
 	ID_EXTERNAL string `gorm:"column:id_external"`
 	Number      string
-	Updated     int64 `gorm:"autoUpdateTime:milli"` // Use unix milli seconds as updating time
-	Created     int64 `gorm:"autoCreateTime"`       // Use unix seconds as creating time	Phone       string
+	Updated     time.Time `gorm:"autoUpdateTime; column:updated_at"` // Use unix milli seconds as updating time
+	Created     time.Time `gorm:"autoCreateTime; column:created_at"` // Use unix seconds as creating time	Phone       string
 	State       string
 	Comment     string
 	Total       uint64

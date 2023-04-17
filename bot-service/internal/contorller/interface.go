@@ -13,19 +13,21 @@ type OrderSender interface {
 //	CheckStatus(order *Order) (string, error)
 //}
 
-//type OrderHistoryRepository interface {
-//	GetLast(count int) []*domainOrder.Order
-//}
+type OrderHistoryRepository interface {
+	GetLast(count int) ([]*domainOrder.Order, error)
+}
 
 type OrderRepository interface {
 	Insert(order *domainOrder.Order) error
-	//Get(id int64) (*domainOrder.Order, error)
+	Get(id string) (*domainOrder.Order, error)
 	//Update(order *domainOrder.Order) error
 	//Delete(id int64) error
 }
 
 type OrderController interface {
 	SendOrder(order *domainOrder.Order) (number string, err error)
+	OrderHistoryRepository
+	Get(id string) (*domainOrder.Order, error)
 }
 
 type ProductController interface {

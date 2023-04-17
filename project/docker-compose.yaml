@@ -11,7 +11,10 @@ services:
 
     volumes:
       - ./../bot-service/configs/:/app/configs
-#
+#      for file_provider
+      - ./../bot-service/data/:/app/data
+
+    #
 #    env_file:
 #      - .env.secret-example
 

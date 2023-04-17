@@ -38,6 +38,7 @@ type Telegram struct {
 const (
 	EvotorAPIKind ProductApiKind = "evo_api"
 	RestoAPIKind  ProductApiKind = "resto_api"
+	FileKind      ProductApiKind = "file_provider"
 )
 
 type ProductApiKind string
@@ -53,6 +54,7 @@ type ProductAPI struct {
 const (
 	OrderAPIKind      OrderApiKind = "order_api"
 	RestoOrderAPIKind OrderApiKind = "resto_api"
+	FileOrderKind     OrderApiKind = "file_provider"
 )
 
 type OrderApiKind string

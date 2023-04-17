@@ -12,6 +12,7 @@ import (
 	productController "github.com/serhiq/skye-trading-bot/internal/contorller/product"
 	"github.com/serhiq/skye-trading-bot/internal/delivery"
 	evoClient "github.com/serhiq/skye-trading-bot/internal/delivery/evotor"
+	"github.com/serhiq/skye-trading-bot/internal/delivery/file"
 	orderClient "github.com/serhiq/skye-trading-bot/internal/delivery/orders"
 	restoranClient "github.com/serhiq/skye-trading-bot/internal/delivery/resto"
 	"github.com/serhiq/skye-trading-bot/internal/logger"
@@ -119,6 +120,8 @@ func (s *Server) initProductController() error {
 			Store:   s.cfg.ProductAPI.Store,
 		},
 		)
+	case config.FileKind:
+		productProvider = file.FileClient{}
 	default:
 		return fmt.Errorf("unknown ProductApiKind: %s", s.cfg.ProductAPI.Kind)
 	}
@@ -166,6 +169,9 @@ func (s *Server) initOrderController() error {
 			Store:   s.cfg.ProductAPI.Store,
 		},
 		)
+	case config.FileOrderKind:
+		orderProvider = file.FileClient{}
+
 	default:
 		return fmt.Errorf("unknown order API %s", s.cfg.ProductAPI.Kind)
 	}

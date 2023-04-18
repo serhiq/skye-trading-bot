@@ -1,0 +1,515 @@
+[
+  {
+    "name": "Десерты",
+    "uuid": "edfee3e3-5c20-4f5c-9e11-4fe937a0ce5c",
+    "parentUuid": "",
+    "group": true,
+    "image": "",
+    "description": "",
+    "Price": 0
+  },
+  {
+    "name": "Супы",
+    "uuid": "2fac6738-66fd-44b3-9596-98654604c318",
+    "parentUuid": "",
+    "group": true,
+    "image": "",
+    "description": "",
+    "Price": 0
+  },
+  {
+    "name": "Детское меню",
+    "uuid": "6e3e87d2-9044-40fe-a793-754aef3d49a2",
+    "parentUuid": "",
+    "group": true,
+    "image": "",
+    "description": "",
+    "Price": 0
+  },
+  {
+    "name": "Поке",
+    "uuid": "f591158f-0ff2-4b01-ab1f-e394dcc4fb75",
+    "parentUuid": "",
+    "group": true,
+    "image": "",
+    "description": "",
+    "Price": 0
+  },
+  {
+    "name": "Горячие блюда",
+    "uuid": "57d3262e-09d7-4e71-851c-67a524d709f9",
+    "parentUuid": "",
+    "group": true,
+    "image": "",
+    "description": "",
+    "Price": 0
+  },
+  {
+    "name": "Салаты",
+    "uuid": "58cf049a-9037-4a05-91d8-984dfcbfad8e",
+    "parentUuid": "",
+    "group": true,
+    "image": "",
+    "description": "",
+    "Price": 0
+  },
+  {
+    "name": "Торты",
+    "uuid": "0d7d18c6-bef5-4214-bd0c-5151abad98d7",
+    "parentUuid": "",
+    "group": true,
+    "image": "",
+    "description": "",
+    "Price": 0
+  },
+  {
+    "name": "Рамэн с говядиной",
+    "uuid": "6fe1468e-6f2e-4adb-958d-756f42425943",
+    "parentUuid": "2fac6738-66fd-44b3-9596-98654604c318",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb3-8cba-63d4-a57c-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 30000
+  },
+  {
+    "name": "Тирамису Кокосовый",
+    "uuid": "c53766fb-b4bc-4059-942c-41be5280665f",
+    "parentUuid": "edfee3e3-5c20-4f5c-9e11-4fe937a0ce5c",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bac-e869-660a-81a3-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 25000
+  },
+  {
+    "name": "Вега Поке",
+    "uuid": "2d95e4f1-a915-4230-b839-96d72e021768",
+    "parentUuid": "f591158f-0ff2-4b01-ab1f-e394dcc4fb75",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb0-3f29-6fb4-8c08-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 39900
+  },
+  {
+    "name": "Китайский салат с говядиной",
+    "uuid": "3920337d-e344-4fd0-ae1f-cf454f86c01a",
+    "parentUuid": "58cf049a-9037-4a05-91d8-984dfcbfad8e",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb1-c443-6028-b7b4-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 33000
+  },
+  {
+    "name": "Лани Поке",
+    "uuid": "b07a3893-425d-4221-a255-fbf63e7fc575",
+    "parentUuid": "f591158f-0ff2-4b01-ab1f-e394dcc4fb75",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb0-8d7e-69bc-bb83-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 39900
+  },
+  {
+    "name": "Veggy Суп",
+    "uuid": "ef87fe53-695c-44d3-aa64-a8af01b04f25",
+    "parentUuid": "2fac6738-66fd-44b3-9596-98654604c318",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb3-3df7-6d46-b579-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 35000
+  },
+  {
+    "name": "Кардинал",
+    "uuid": "71007896-5bed-466d-ac10-7caa29db6638",
+    "parentUuid": "0d7d18c6-bef5-4214-bd0c-5151abad98d7",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb4-fdb8-6422-a839-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 90000
+  },
+  {
+    "name": "Чизкейк",
+    "uuid": "e56ec683-c140-4762-864a-4e32d70bcc59",
+    "parentUuid": "edfee3e3-5c20-4f5c-9e11-4fe937a0ce5c",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bad-68d8-6dae-8c9d-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 19500
+  },
+  {
+    "name": "Лиму Поке",
+    "uuid": "d5fcb042-9878-44c6-9d03-ad17834fef9a",
+    "parentUuid": "f591158f-0ff2-4b01-ab1f-e394dcc4fb75",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb0-bcb5-6014-9585-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 39900
+  },
+  {
+    "name": "Сяке Поке",
+    "uuid": "8e487ab8-eb00-475b-af35-408b511eaea1",
+    "parentUuid": "f591158f-0ff2-4b01-ab1f-e394dcc4fb75",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb0-e5c6-6066-bf97-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 39900
+  },
+  {
+    "name": "Сырники",
+    "uuid": "7b2df145-c56a-439a-8ada-eae43308e6db",
+    "parentUuid": "6e3e87d2-9044-40fe-a793-754aef3d49a2",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3baf-3212-6d2c-9626-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 21000
+  },
+  {
+    "name": "Кай Поке",
+    "uuid": "dee5ded5-409f-4294-a409-5e5dcad8be25",
+    "parentUuid": "f591158f-0ff2-4b01-ab1f-e394dcc4fb75",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb0-67f8-6530-9f93-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 39900
+  },
+  {
+    "name": "Салат с сёмгой и фунчозой",
+    "uuid": "bc7d882d-9dde-4a33-ad4b-110a30f5b1b6",
+    "parentUuid": "58cf049a-9037-4a05-91d8-984dfcbfad8e",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb2-52d3-63ce-b023-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 32500
+  },
+  {
+    "name": "ЯКИ сяке",
+    "uuid": "4d3e2a48-07e5-4edc-b919-054cbd7edde2",
+    "parentUuid": "57d3262e-09d7-4e71-851c-67a524d709f9",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3baa-ef2a-6612-afd2-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 42000
+  },
+  {
+    "name": "Салат с угрём",
+    "uuid": "a85c5503-091d-4d42-bab2-f22fccdfb803",
+    "parentUuid": "58cf049a-9037-4a05-91d8-984dfcbfad8e",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb2-88fb-662c-812c-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 46500
+  },
+  {
+    "name": "Куриный шашлычок с рисом",
+    "uuid": "edbebe44-4d12-4f55-8cf0-8889cedcb3a2",
+    "parentUuid": "6e3e87d2-9044-40fe-a793-754aef3d49a2",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bae-c5a4-6f82-9113-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 20000
+  },
+  {
+    "name": "ЯКИ эби",
+    "uuid": "7e50ead9-574a-4376-882e-1510a8027b2b",
+    "parentUuid": "57d3262e-09d7-4e71-851c-67a524d709f9",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bab-2dcf-6124-91bb-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 38000
+  },
+  {
+    "name": "Салат с курицей",
+    "uuid": "2f6bb997-0611-4e82-a03d-23470f8f4d9f",
+    "parentUuid": "58cf049a-9037-4a05-91d8-984dfcbfad8e",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb2-1d65-6552-af9f-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 26000
+  },
+  {
+    "name": "Унаги Поке",
+    "uuid": "8db4217a-831c-4566-b6d5-16378a548dd3",
+    "parentUuid": "f591158f-0ff2-4b01-ab1f-e394dcc4fb75",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb1-0ae3-6ace-95b4-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 39900
+  },
+  {
+    "name": "Ядзу салат",
+    "uuid": "78c88856-0eec-4dbb-8739-04cf097c27d7",
+    "parentUuid": "58cf049a-9037-4a05-91d8-984dfcbfad8e",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb2-add1-60fa-888f-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 35000
+  },
+  {
+    "name": "Жареное молоко",
+    "uuid": "40daa57f-730a-4a0d-8eaa-b96a8f5d70a1",
+    "parentUuid": "edfee3e3-5c20-4f5c-9e11-4fe937a0ce5c",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bac-8f6b-67ba-971a-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 20000
+  },
+  {
+    "name": "Космос",
+    "uuid": "cc2c16ae-66ca-4be1-aff1-4f33670df429",
+    "parentUuid": "0d7d18c6-bef5-4214-bd0c-5151abad98d7",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb5-2fc9-60b0-8dc1-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 105000
+  },
+  {
+    "name": "Наггетсы с картофелем фри",
+    "uuid": "af0cf94b-8df5-4b92-b3ba-f832097d54cf",
+    "parentUuid": "6e3e87d2-9044-40fe-a793-754aef3d49a2",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3baf-0251-6f7a-8ffe-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 23500
+  },
+  {
+    "name": "Чиа пудинг",
+    "uuid": "b12ec0f1-010b-4741-afd4-11ad781dc07b",
+    "parentUuid": "edfee3e3-5c20-4f5c-9e11-4fe937a0ce5c",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bad-36b2-699c-aa9e-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 28000
+  },
+  {
+    "name": "Бургер Детский",
+    "uuid": "5e629dcf-9a01-48cd-9245-fe3942aebe61",
+    "parentUuid": "6e3e87d2-9044-40fe-a793-754aef3d49a2",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bae-30da-64e2-8a46-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 20000
+  },
+  {
+    "name": "Салат из битых огурцов",
+    "uuid": "7d417395-7f53-4f52-8e94-b37df3a3869e",
+    "parentUuid": "58cf049a-9037-4a05-91d8-984dfcbfad8e",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb1-f3f2-6e22-89e0-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 23000
+  },
+  {
+    "name": "Мирабель",
+    "uuid": "59871d5e-6fd1-4e46-82e1-0e8e8f9ec403",
+    "parentUuid": "0d7d18c6-bef5-4214-bd0c-5151abad98d7",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb5-70b4-652a-81da-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 91000
+  },
+  {
+    "name": "Свинина в кисло-сладком соусе",
+    "uuid": "b26141ad-36d0-41f3-a0fb-0c075f6ce013",
+    "parentUuid": "57d3262e-09d7-4e71-851c-67a524d709f9",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3ba3-531c-633a-8f02-46433ed1f497.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 36000
+  },
+  {
+    "name": "Черёмуховый торт",
+    "uuid": "9cb15aab-dd02-438f-ae8d-02aef949f76d",
+    "parentUuid": "0d7d18c6-bef5-4214-bd0c-5151abad98d7",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb5-dee6-6ae8-afb7-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 105000
+  },
+  {
+    "name": "Алоха Поке",
+    "uuid": "a7e133d0-3b8b-4848-8f09-fabc342bc6b5",
+    "parentUuid": "f591158f-0ff2-4b01-ab1f-e394dcc4fb75",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb0-121a-6a82-9453-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 39900
+  },
+  {
+    "name": "Тирамису",
+    "uuid": "ae130f00-85d7-4bf2-a894-bbe165b0f9aa",
+    "parentUuid": "0d7d18c6-bef5-4214-bd0c-5151abad98d7",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb5-afdd-6846-83d4-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 98000
+  },
+  {
+    "name": "Дебют",
+    "uuid": "22f8c76c-49b2-4b7d-bdb2-e896f3de9e14",
+    "parentUuid": "0d7d18c6-bef5-4214-bd0c-5151abad98d7",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb4-cd1e-694c-98f8-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 104700
+  },
+  {
+    "name": "Банановые оладьи с манго соусом и ежевикой",
+    "uuid": "ce19022f-b06c-4b95-9d3b-35dfa28197e0",
+    "parentUuid": "edfee3e3-5c20-4f5c-9e11-4fe937a0ce5c",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bac-5b9a-6d5a-b682-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 17000
+  },
+  {
+    "name": "Фо Бо",
+    "uuid": "3bebfa1a-078c-4e6c-91f3-3bb8bfd05ba3",
+    "parentUuid": "2fac6738-66fd-44b3-9596-98654604c318",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb4-135c-6694-907d-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 30000
+  },
+  {
+    "name": "ЯКИ тори",
+    "uuid": "a3ebbbe0-b850-4a69-96b2-ce4019538a15",
+    "parentUuid": "57d3262e-09d7-4e71-851c-67a524d709f9",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3ba3-ca8f-6034-9772-46433ed1f497.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 35000
+  },
+  {
+    "name": "Лакса",
+    "uuid": "937ea6ac-67a9-41c7-9b4c-7a80fa64fdb9",
+    "parentUuid": "2fac6738-66fd-44b3-9596-98654604c318",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb3-694d-6c52-b053-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 44000
+  },
+  {
+    "name": "Сладкий ролл",
+    "uuid": "6c554b76-d1f9-483c-9781-d9737317d8aa",
+    "parentUuid": "edfee3e3-5c20-4f5c-9e11-4fe937a0ce5c",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bac-b8e7-63aa-a1a4-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 28500
+  },
+  {
+    "name": "Том Ям с курицей",
+    "uuid": "70e1c4d6-994a-48dc-8566-53a939c7e710",
+    "parentUuid": "2fac6738-66fd-44b3-9596-98654604c318",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb3-ee61-64e8-9af8-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 37000
+  },
+  {
+    "name": "Куриный супчик",
+    "uuid": "76d064c3-70d9-4bdd-8612-64ccdb8bb7de",
+    "parentUuid": "6e3e87d2-9044-40fe-a793-754aef3d49a2",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bae-80c2-6c98-81f4-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 15000
+  },
+  {
+    "name": "Куриная котлета с крокетами",
+    "uuid": "a3523f5d-30ff-4fe4-b488-622ed0ed7245",
+    "parentUuid": "6e3e87d2-9044-40fe-a793-754aef3d49a2",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bae-5b2d-61e0-ad44-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 21000
+  },
+  {
+    "name": "Том Ям с креветками",
+    "uuid": "30011d02-cab7-4716-b9f2-3c61c83afde6",
+    "parentUuid": "2fac6738-66fd-44b3-9596-98654604c318",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb3-bf21-6156-a0c5-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 39900
+  },
+  {
+    "name": "Чао Cай",
+    "uuid": "2828a50c-efe3-4041-b340-e78b93ff34fc",
+    "parentUuid": "6e3e87d2-9044-40fe-a793-754aef3d49a2",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3baf-5974-6bae-9339-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 16000
+  },
+  {
+    "name": "Курица в кисло-сладком соусе",
+    "uuid": "d145e6de-dc84-48fd-a5bc-bec45bf3d8e0",
+    "parentUuid": "57d3262e-09d7-4e71-851c-67a524d709f9",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3ba3-0074-67ae-9668-46433ed1f497.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 36000
+  },
+  {
+    "name": "Японский Моти",
+    "uuid": "9313cdea-f845-44bd-9ffe-dc3bbb41b8a9",
+    "parentUuid": "edfee3e3-5c20-4f5c-9e11-4fe937a0ce5c",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bad-9830-6976-a5af-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 30000
+  },
+  {
+    "name": "Фо Га",
+    "uuid": "81e62cfe-3f27-410b-9fc3-1aa32070fd79",
+    "parentUuid": "2fac6738-66fd-44b3-9596-98654604c318",
+    "group": false,
+    "image": "https://resto.evotor.tech/media/20190325-E08E-40B8-8020-5B5A49A5C656/1edd3bb4-3f15-6998-a5df-aac0392d4c1b.jpg",
+    "description": "",
+    "measureName": "шт",
+    "Price": 30000
+  }
+]

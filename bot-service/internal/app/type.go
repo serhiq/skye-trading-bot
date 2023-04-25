@@ -14,8 +14,13 @@ type App struct {
 
 	ProductController contorller.ProductController
 	OrderController   contorller.OrderController
+	Cfg               *AppConfig
 
 	Bot *TelegramBot
+}
+
+type AppConfig struct {
+	TimeZone string
 }
 
 type TelegramBot struct {

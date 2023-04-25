@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/serhiq/skye-trading-bot/internal/bot/commands"
 	"github.com/serhiq/skye-trading-bot/pkg/type/order"
@@ -34,13 +35,22 @@ func ClickOnRepeatOrder(uuid string) *commands.UserCommand {
 
 const CLICK_ON_REPEAT_ORDER = "re"
 
-func formatDisplayHistoryOrder(order *order.Order) *strings.Builder {
+func formatDisplayHistoryOrder(order *order.Order, timezone string) *strings.Builder {
 	sb := strings.Builder{}
 	sb.WriteString("Заказ №<b>")
 	sb.WriteString(order.Number)
 	sb.WriteString("</b>")
-	sb.WriteString(" от ")
-	sb.WriteString(order.ConvertUpdatedAtToString())
+
+	if timezone != "" {
+		dateStr, err := order.ConvertUpdatedAtToString(timezone)
+		if err == nil {
+			sb.WriteString(" от ")
+			sb.WriteString(dateStr)
+		} else {
+			fmt.Printf("error: incorrect timeZone, %s, err: %s", timezone, err.Error())
+		}
+	}
+
 	sb.WriteString("\n")
 	sb.WriteString(order.StateDescription())
 	sb.WriteString("\n")

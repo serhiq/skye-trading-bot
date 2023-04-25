@@ -14,7 +14,8 @@ import (
 )
 
 type Options struct {
-	Token string
+	Token    string
+	TimeZone string
 }
 
 type Performer struct {
@@ -210,6 +211,7 @@ func New(options Options, productController contorller.ProductController, repoCh
 			RepoChat:          repoChat,
 			OrderController:   orderController,
 			Bot:               app.NewTelegramBot(bot),
+			Cfg:               &app.AppConfig{TimeZone: options.TimeZone},
 		}}
 
 	p.AddMenuCommandHandler("start", b.StartCommand)

@@ -15,6 +15,10 @@ RUN chmod +x /app/bot
 # build a tiny docker image
 FROM alpine:latest
 
+RUN apk update && apk add --no-cache tzdata
+
+ENV TZDIR=/usr/share/zoneinfo
+
 RUN mkdir /app
 
 WORKDIR /app

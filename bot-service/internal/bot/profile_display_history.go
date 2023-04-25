@@ -18,7 +18,7 @@ func ProfileDisplayHistory(app *app.App, callback *tgbotapi.CallbackQuery) error
 	orders, err := app.OrderController.GetLast(3)
 
 	for _, order := range orders {
-		msg := tgbotapi.NewMessage(session.ChatId, formatDisplayHistoryOrder(order).String())
+		msg := tgbotapi.NewMessage(session.ChatId, formatDisplayHistoryOrder(order, app.Cfg.TimeZone).String())
 		msg.ParseMode = tgbotapi.ModeHTML
 
 		keyboard, err := makeHistoryOrderKeyboard(order)

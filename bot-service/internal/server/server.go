@@ -40,6 +40,8 @@ type Server struct {
 }
 
 func Serve(cfg config.Config) (*Server, error) {
+	fmt.Printf("\n%#v\n\n", cfg)
+
 	var s = &Server{
 		cfg:       cfg,
 		store:     nil,
@@ -201,7 +203,8 @@ func (s *Server) addStopDelegate(delegate func()) {
 
 func (s *Server) initBot() error {
 	sBot, err := performer.New(performer.Options{
-		Token: s.cfg.Telegram.Token,
+		Token:    s.cfg.Telegram.Token,
+		TimeZone: s.cfg.Project.Timezone,
 	}, s.productController, s.sessionRepository, s.orderController)
 
 	if err != nil {

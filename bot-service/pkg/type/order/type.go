@@ -164,8 +164,15 @@ func (c *Order) OrderDescriptionNew() string {
 	return b.String()
 }
 
-func (c *Order) ConvertUpdatedAtToString() string {
-	return c.UpdatedAt.Format("02.01.2006")
+func (c *Order) ConvertUpdatedAtToString(timezone string) (string, error) {
+	loc, err := time.LoadLocation(timezone)
+
+	if err != nil {
+		return "", err
+	}
+
+	localTime := c.UpdatedAt.In(loc)
+	return localTime.Format("02.01.2006 15:04:05"), nil
 }
 
 func (c *Order) ToJson() (string, error) {

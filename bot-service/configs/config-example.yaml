@@ -2,6 +2,7 @@
 project:
   name: Skye Trading bot
   serviceName: Skye-trading-bot
+  timezone: Asia/Novosibirsk
 
 # Настройки бота Telegram
 telegram:

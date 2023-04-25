@@ -29,6 +29,7 @@ type Project struct {
 	Name        string `yaml:"name"`
 	ServiceName string `yaml:"serviceName"`
 	Version     string
+	Timezone    string `yaml:"timezone"`
 }
 
 type Telegram struct {

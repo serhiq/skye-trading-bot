@@ -73,7 +73,6 @@ func New(Db *gorm.DB) *Repository {
 
 type Product struct {
 	Name        string `json:"name"`
-	StoreID     string `json:"storeId,omitempty" gorm:"column:store_id"`
 	UUID        string `json:"uuid"`
 	ParentUUID  string `json:"parentUuid"  gorm:"column:parent_uuid"`
 	Group       bool   `json:"group"`

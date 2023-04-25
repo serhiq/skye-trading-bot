@@ -80,21 +80,11 @@ func (s *Server) Stop() {
 
 func (s *Server) initSessionRepository() error {
 
-	err := s.store.Db.AutoMigrate(&repositoryChat.Chat{})
-	if err != nil {
-		return err
-	}
-
 	s.sessionRepository = repositoryChat.New(s.store.Db)
 	return nil
 }
 
 func (s *Server) initProductController() error {
-
-	err := s.store.Db.AutoMigrate(&repositoryProduct.Product{})
-	if err != nil {
-		return err
-	}
 
 	productRepo := repositoryProduct.New(s.store.Db)
 	client := r.New()
@@ -142,10 +132,6 @@ func (s *Server) initProductController() error {
 }
 
 func (s *Server) initOrderController() error {
-	err := s.store.Db.AutoMigrate(&repositoryOrder.Order{}, &repositoryOrder.OrderPosition{})
-	if err != nil {
-		return err
-	}
 
 	client := r.New()
 	orderRepo := repositoryOrder.New(s.store.Db)

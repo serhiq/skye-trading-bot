@@ -63,13 +63,11 @@ func mapToDatabaseOrder(order *domainOrder.Order) *Order {
 		UUID:        order.ID,
 		ID_EXTERNAL: order.ExternalID,
 		Number:      order.Number,
-		//CreatedAt:   order.CreatedAt.Time,
-		//UpdatedAt:   order.UpdatedAt.Time,
-		Phone:     order.Contacts.Phone,
-		State:     order.State,
-		Comment:   order.Comment,
-		Total:     total,
-		Positions: positions,
+		Phone:       order.Contacts.Phone,
+		State:       order.State,
+		Comment:     order.Comment,
+		Total:       total,
+		Positions:   positions,
 	}
 
 }
@@ -120,23 +118,22 @@ func (OrderPosition) TableName() string {
 }
 
 type Order struct {
-	ID          uint64 `gorm:"primaryKey;autoIncrement:true"`
+	ID          uint64
 	UUID        string
-	ID_EXTERNAL string `gorm:"column:id_external"`
+	ID_EXTERNAL string
 	Number      string
-	Updated     time.Time `gorm:"autoUpdateTime; column:updated_at"` // Use unix milli seconds as updating time
-	Created     time.Time `gorm:"autoCreateTime; column:created_at"` // Use unix seconds as creating time	Phone       string
+	Updated     time.Time `gorm:"column:updated_at; default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"`
+	Created     time.Time `gorm:"column:created_at; default:CURRENT_TIMESTAMP()"`
 	State       string
 	Comment     string
 	Total       uint64
 	Phone       string
-	Positions   []OrderPosition `gorm:"foreignKey:id"`
+	Positions   []OrderPosition `gorm:"foreignKey:id_order;references:id"`
 }
 
 type OrderPosition struct {
-	ID                 string `gorm:"primaryKey;"`
-	Position           int
-	IdOrder            string `gorm:"column:id_order;size:100"`
+	ID                 uint64 `gorm:"primaryKey;"`
+	IdOrder            uint64 `gorm:"column:id_order;"`
 	ProductUUID        string `gorm:"column:product_uuid;"`
 	ProductName        string `gorm:"column:product_name;"`
 	ProductMeasureName string `gorm:"column:measure_name;"`

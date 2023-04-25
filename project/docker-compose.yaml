@@ -5,7 +5,7 @@ services:
     build:
       context: ./../bot-service
       dockerfile: ./../bot-service/bot-service.dockerfile
-#    restart: always
+    restart: always
 #    ports:
 #      - "7777:7777"
 
@@ -14,7 +14,7 @@ services:
 #      for file_provider
       - ./../bot-service/data/:/app/data
 
-    #
+
 #    env_file:
 #      - .env.secret-example
 
@@ -36,7 +36,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: a_bot_db
+      MYSQL_DATABASE: sbot_db
       MYSQL_USER: user_app
       MYSQL_PASSWORD: password
       MYSQL_HOST: mysql
@@ -48,7 +48,7 @@ services:
       - gateway
     volumes:
       - ./db-data/:/var/lib/mysql
-
+      - ./migration:/docker-entrypoint-initdb.d
   #  adminer:
   #    restart: always
   #    image: adminer

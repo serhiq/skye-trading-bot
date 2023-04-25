@@ -18,7 +18,7 @@ func New(s config.DBConfig) (*Store, error) {
 		PrepareStmt: false,
 	}
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci&time_zone=UTC",
 		s.Username,
 		s.Password,
 		s.Host,

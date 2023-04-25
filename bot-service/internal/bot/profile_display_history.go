@@ -17,6 +17,16 @@ func ProfileDisplayHistory(app *app.App, callback *tgbotapi.CallbackQuery) error
 
 	orders, err := app.OrderController.GetLast(3)
 
+	if err != nil {
+		msg := tgbotapi.NewMessage(session.ChatId, SAY_CANT_GET_ORDER)
+		return app.Bot.Reply(msg)
+	}
+
+	if len(orders) == 0 {
+		msg := tgbotapi.NewMessage(session.ChatId, SAY_EMPTY_HISTORY)
+		return app.Bot.Reply(msg)
+	}
+
 	for _, order := range orders {
 		msg := tgbotapi.NewMessage(session.ChatId, formatDisplayHistoryOrder(order, app.Cfg.TimeZone).String())
 		msg.ParseMode = tgbotapi.ModeHTML

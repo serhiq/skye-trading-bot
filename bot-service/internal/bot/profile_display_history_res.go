@@ -12,6 +12,11 @@ const (
 	REPEAT_BUTTON = "Повторить"
 )
 
+const (
+	SAY_CANT_GET_ORDER = "История заказов временно недоступна"
+	SAY_EMPTY_HISTORY  = "Нет прошлых заказов"
+)
+
 func makeHistoryOrderKeyboard(order *order.Order) (tgbotapi.InlineKeyboardMarkup, error) {
 	rows := [][]tgbotapi.InlineKeyboardButton{}
 	command, err := ClickOnRepeatOrder(order.ID).ToJson()

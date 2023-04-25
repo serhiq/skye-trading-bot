@@ -42,11 +42,11 @@ type Position struct {
 	Quantity          int
 }
 
-func (c *Order) AddItem(item *product.Product) {
+func (c *Order) AddItem(item *product.Product, quantity int) {
 
 	for i, position := range c.Positions {
 		if position.ProductUUID == item.UUID {
-			c.Positions[i].Quantity = position.Quantity + 1
+			c.Positions[i].Quantity = position.Quantity + quantity
 			return
 		}
 	}
@@ -56,7 +56,7 @@ func (c *Order) AddItem(item *product.Product) {
 		ProductName:       item.Name,
 		Price:             item.Price,
 		PriceWithDiscount: item.Price,
-		Quantity:          1,
+		Quantity:          quantity,
 	})
 }
 

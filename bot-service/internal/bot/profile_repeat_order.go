@@ -5,7 +5,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/serhiq/skye-trading-bot/internal/app"
 	"github.com/serhiq/skye-trading-bot/internal/bot/commands"
-	"github.com/serhiq/skye-trading-bot/pkg/type/order"
 )
 
 func ProfileRepeatOrder(app *app.App, callback *tgbotapi.CallbackQuery) error {
@@ -22,10 +21,18 @@ func ProfileRepeatOrder(app *app.App, callback *tgbotapi.CallbackQuery) error {
 		return fmt.Errorf("Failed to get chat  %s", err)
 	}
 
-	newOrder := &order.Order{}
-	newOrder.Positions = o.Positions
+	order := session.GetDraftOrder()
 
-	orderStr, err := newOrder.ToJson()
+	for _, oldPosition := range o.Positions {
+		product, err := app.ProductController.GetProductByUuid(oldPosition.ProductUUID)
+		if err != nil {
+			continue
+		}
+
+		order.AddItem(product, oldPosition.Quantity)
+	}
+
+	orderStr, err := order.ToJson()
 	if err != nil {
 		return err
 	}

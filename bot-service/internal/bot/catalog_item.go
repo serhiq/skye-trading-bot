@@ -88,7 +88,7 @@ func ClickOnIncreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 	}
 
 	order := session.GetDraftOrder()
-	order.AddItem(menuItem)
+	order.AddItem(menuItem, 1)
 
 	var msgText = "В заказ добавлена позиция " + menuItem.Name + " " + menuItem.PriceString()
 	strOrder, err := order.ToJson()

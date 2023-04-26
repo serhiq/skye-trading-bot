@@ -1,12 +1,10 @@
-# Настройки приложения
 project:
   name: Skye Trading bot
   serviceName: Skye-trading-bot
   timezone: Asia/Novosibirsk
 
-# Настройки бота Telegram
 telegram:
-  token: <YOUR_BOT_TOKEN>
+  token:  <YOUR_BOT_TOKEN>
 
 # Настройки базы данных MySQL
 database:
@@ -17,21 +15,21 @@ database:
   password: my_app_password
 
 
-# Настройки внешнего API для загрузки номенклатуры
-product_api:
-  kind: "evo_api"
-  base_url: https://api.evotor.ru/stores/
-  auth:  <YOUR_API_TOKEN>
-  store: <YOUR_API_TOKEN>
-  menu_root:
-
-# Настройки внешнего API для создания заказов
-order_api:
-  kind: "order_api"
-  base_url: https://dclubs.ru/evotor/orders/api/3rdparty/v2
-  auth:  <YOUR_API_TOKEN>
-  store:  <YOUR_API_TOKEN>
-
 # настройки для отправки логов
 telemetry:
   graylogPath: 127.0.0.1:12201
+
+
+# Настройки внешнего API для загрузки номенклатуры
+product_api:
+  kind: "resto_api"
+  base_url: https://resto.evotor.tech/api/3rdparty
+  auth:  <YOUR_API_TOKEN>
+  store:  <YOUR_STORE_UUID>
+
+# Настройки внешнего API для создания заказов
+order_api:
+  kind: "resto_api"
+  base_url: https://resto.evotor.tech/api/3rdparty
+  auth:  <YOUR_API_TOKEN>
+  store: <YOUR_API_TOKEN>

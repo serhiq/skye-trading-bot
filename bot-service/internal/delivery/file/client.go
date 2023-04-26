@@ -2,7 +2,10 @@ package file
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
+	"github.com/serhiq/skye-trading-bot/internal/utils"
 	domainOrder "github.com/serhiq/skye-trading-bot/pkg/type/order"
 	"github.com/serhiq/skye-trading-bot/pkg/type/product"
 	"os"
@@ -19,7 +22,16 @@ func (f FileClient) Send(order *domainOrder.Order) (externalUuid string, err err
 func (f FileClient) GetProducts() ([]*product.Product, error) {
 	var result []*product.Product
 
-	data, err := os.ReadFile("./data/products.json")
+	filePath := "./assets/products.json"
+	data, err := os.ReadFile(filePath)
+
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to read file: %s not found in current directory %s", filePath, utils.GetCurrentDirectory()))
+		}
+		return result, err
+	}
+
 	if err != nil {
 		return result, err
 	}
@@ -57,5 +69,5 @@ type MenuItem struct {
 	MeasureName string `json:"measureName,omitempty"`
 	Description string `json:"description,omitempty"`
 	ParentUUID  string `json:"parentUuid,omitempty"`
-	ImageURL    string `json:"image_url,omitempty"`
+	ImageURL    string `json:"image,omitempty"`
 }

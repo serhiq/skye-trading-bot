@@ -9,8 +9,9 @@ import (
 	"path/filepath"
 )
 
-const TempPatch = "./tmp/"
-const PreviewCachePatch = "./imageCache/"
+const TempPatch = "./assets/tmp/"
+const PreviewCachePatch = "./assets/previews/"
+const FileProviderPatch = "./assets/images/"
 
 var (
 	version string = "1.0"
@@ -84,7 +85,7 @@ func New() (*Config, error) {
 	if path == "" {
 		path = "./configs/config.yaml"
 	}
-	//
+
 	config := &Config{}
 
 	if err := fromYaml(path, config); err != nil {
@@ -137,31 +138,37 @@ func validate(cfg *Config) error {
 	if cfg.ProductAPI.Kind == "" {
 		return fmt.Errorf("config: %s is not set", "Kind")
 	}
-	if cfg.ProductAPI.BaseURL == "" {
-		return fmt.Errorf("config: %s is not set", "API_BASE_URL")
-	}
 
-	if cfg.ProductAPI.Auth == "" {
-		return fmt.Errorf("config: %s is not set", "Auth")
-	}
+	if cfg.ProductAPI.Kind != FileKind {
+		if cfg.ProductAPI.BaseURL == "" {
+			return fmt.Errorf("config: %s is not set", "API_BASE_URL")
+		}
 
-	if cfg.ProductAPI.Store == "" {
-		return fmt.Errorf("config: %s is not set", "Store")
+		if cfg.ProductAPI.Auth == "" {
+			return fmt.Errorf("config: %s is not set", "Auth")
+		}
+
+		if cfg.ProductAPI.Store == "" {
+			return fmt.Errorf("config: %s is not set", "Store")
+		}
 	}
 
 	if cfg.OrderAPI.Kind == "" {
 		return fmt.Errorf("config: %s is not set", "Kind")
 	}
-	if cfg.OrderAPI.BaseURL == "" {
-		return fmt.Errorf("config: %s is not set", "API_BASE_URL")
-	}
 
-	if cfg.OrderAPI.Auth == "" {
-		return fmt.Errorf("config: %s is not set", "Auth")
-	}
+	if cfg.OrderAPI.Kind != FileOrderKind {
+		if cfg.OrderAPI.BaseURL == "" {
+			return fmt.Errorf("config: %s is not set", "API_BASE_URL")
+		}
 
-	if cfg.OrderAPI.Store == "" {
-		return fmt.Errorf("config: %s is not set", "Store")
+		if cfg.OrderAPI.Auth == "" {
+			return fmt.Errorf("config: %s is not set", "Auth")
+		}
+
+		if cfg.OrderAPI.Store == "" {
+			return fmt.Errorf("config: %s is not set", "Store")
+		}
 	}
 
 	if cfg.DBConfig.DatabaseName == "" {

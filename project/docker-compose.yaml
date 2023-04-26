@@ -12,7 +12,7 @@ services:
     volumes:
       - ./../bot-service/configs/:/app/configs
 #      for file_provider
-      - ./../bot-service/data/:/app/data
+      - ./../bot-service/assets/:/app/assets
 
 
 #    env_file:
@@ -49,6 +49,7 @@ services:
     volumes:
       - ./db-data/:/var/lib/mysql
       - ./migration:/docker-entrypoint-initdb.d
+
   #  adminer:
   #    restart: always
   #    image: adminer

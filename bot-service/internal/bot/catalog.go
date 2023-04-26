@@ -5,8 +5,10 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/serhiq/skye-trading-bot/internal/app"
 	"github.com/serhiq/skye-trading-bot/internal/bot/commands"
+	"github.com/serhiq/skye-trading-bot/internal/config"
 	"github.com/serhiq/skye-trading-bot/pkg/type/product"
 	"io/ioutil"
+	"path/filepath"
 )
 
 func DisplayMenuHandler(app *app.App, message *tgbotapi.Message) error {
@@ -49,7 +51,7 @@ func ClickOnItemCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) 
 	}
 
 	if menuItem.UUID != "" {
-		src := "./imageCache/" + menuItem.UUID
+		src := filepath.Join(config.PreviewCachePatch, menuItem.UUID)
 
 		file, err := ioutil.ReadFile(src)
 		if err != nil {

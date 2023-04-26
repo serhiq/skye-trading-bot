@@ -1,0 +1,33 @@
+project:
+  name: Skye Trading bot
+  serviceName: Skye-trading-bot
+  timezone: Asia/Novosibirsk
+
+telegram:
+  token: 5215847838:AAFQTIK_xVwC4x0kTkRZQytDNJUBPPIzJo0
+
+# Настройки базы данных MySQL
+database:
+  host: mysql
+  port: 3306
+  database_name: sbot_db
+  username: user_app
+  password: password
+
+# настройки для отправки логов
+telemetry:
+  graylogPath: 127.0.0.1:12201
+
+
+# Настройки внешнего API для загрузки номенклатуры
+product_api:
+  kind: "file_provider"
+
+# Настройки внешнего API для создания заказов
+order_api:
+  kind: "file_provider"
+
+
+
+
+

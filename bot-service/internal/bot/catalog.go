@@ -17,7 +17,7 @@ func DisplayMenuHandler(app *app.App, message *tgbotapi.Message) error {
 
 	items, err := app.ProductController.GetProductByParent("")
 	if err != nil {
-		return fmt.Errorf("Failed to get menu  %s", err)
+		return fmt.Errorf("Failed to get menu  %s", err.Error())
 	}
 	keyboard, err := Keyboard(items, true)
 	if err != nil {
@@ -34,12 +34,12 @@ func ClickOnItemCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) 
 	var c = commands.New(callback.Data)
 	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
+		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err.Error())
 	}
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 	count := session.GetDraftOrder().CounterPosition(menuItem.UUID)
 
@@ -55,13 +55,13 @@ func ClickOnItemCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery) 
 
 		file, err := ioutil.ReadFile(src)
 		if err != nil {
-			fmt.Printf("bot: error loading image %s", err)
+			fmt.Printf("bot: error loading image %s", err.Error())
 		} else {
 
 			var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
 			err := app.Bot.Reply(deleteMsg)
 			if err != nil {
-				fmt.Printf("error delete message: %s", err)
+				fmt.Printf("error delete message: %s", err.Error())
 			}
 
 			photoFileBytes := tgbotapi.FileBytes{
@@ -107,7 +107,7 @@ func ClickOnFolderCallbackHandler(app *app.App, callback *tgbotapi.CallbackQuery
 	var c = commands.New(callback.Data)
 	var items, err = app.ProductController.GetProductByParent(c.Uuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get menu  %s", err)
+		return fmt.Errorf("Failed to get menu  %s", err.Error())
 	}
 
 	keyboard, err := Keyboard(items, c.Uuid == "")
@@ -124,14 +124,14 @@ func ClickOnBackInFolderCallbackHandler(app *app.App, callback *tgbotapi.Callbac
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
 	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
-		fmt.Printf("error delete message: %s", err)
+		fmt.Printf("error delete message: %s", err.Error())
 	}
 
 	var c = commands.New(callback.Data)
 
 	items, err := app.ProductController.GetProductByParent(c.Uuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get menu  %s", err)
+		return fmt.Errorf("Failed to get menu  %s", err.Error())
 	}
 
 	keyboard, err := Keyboard(items, c.Uuid == "")

@@ -13,12 +13,12 @@ func ProfileRepeatOrder(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var c = commands.New(callback.Data)
 	o, err := app.OrderController.Get(c.Uuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get order item %s, err:  %s", c.Uuid, err)
+		return fmt.Errorf("Failed to get order item %s, err:  %s", c.Uuid, err.Error())
 	}
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 
 	order := session.GetDraftOrder()

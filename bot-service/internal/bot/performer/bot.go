@@ -162,7 +162,7 @@ func (p *Performer) process(update *tgbotapi.Update) error {
 	if update.Message != nil {
 		session, err := p.App.RepoChat.GetOrCreateChat(update.Message.Chat.ID)
 		if err != nil {
-			return fmt.Errorf("Failed to get chat  %s", err)
+			return fmt.Errorf("Failed to get chat  %s", err.Error())
 		}
 
 		return p.processFreeInput(update.Message.Text, session)

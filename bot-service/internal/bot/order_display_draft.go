@@ -15,7 +15,7 @@ func DisplayOrderHandler(app *app.App, message *tgbotapi.Message) error {
 func displayOrderWithMenu(app *app.App, chatId int64) error {
 	session, err := app.RepoChat.GetOrCreateChat(chatId)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 
@@ -57,12 +57,12 @@ func ClickOnEditPositionCallbackHandler(app *app.App, callback *tgbotapi.Callbac
 func displayPositionEditMenu(app *app.App, productUuid string, chatId int64, messageId int) error {
 	menuItem, err := app.ProductController.GetProductByUuid(productUuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get menu item %s, err:  %s", productUuid, err)
+		return fmt.Errorf("Failed to get menu item %s, err:  %s", productUuid, err.Error())
 	}
 
 	session, err := app.RepoChat.GetOrCreateChat(chatId)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 
 	order := session.GetDraftOrder()
@@ -107,7 +107,7 @@ func DisplayEditOrder(app *app.App, ChatId int64) (string, *tgbotapi.InlineKeybo
 
 	session, err := app.RepoChat.GetOrCreateChat(ChatId)
 	if err != nil {
-		return "", nil, fmt.Errorf("Failed to get chat  %s", err)
+		return "", nil, fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 
@@ -135,12 +135,12 @@ func ClickOnIncreasePositionEditOrderCallbackHandler(app *app.App, callback *tgb
 	var c = commands.New(callback.Data)
 	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
+		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err.Error())
 	}
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 	order := session.GetDraftOrder()
@@ -172,12 +172,12 @@ func ClickOnDecreasePositionEditOrderCallbackHandler(app *app.App, callback *tgb
 	var c = commands.New(callback.Data)
 	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
+		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err.Error())
 	}
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 	order := session.GetDraftOrder()

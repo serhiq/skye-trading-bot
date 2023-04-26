@@ -22,7 +22,7 @@ func New(str string) *UserCommand {
 func (c *UserCommand) ToJson() (string, error) {
 	bytes, err := json.Marshal(c)
 	if err != nil {
-		return "", fmt.Errorf("failed to marshal object to JSON: %#v", err)
+		return "", fmt.Errorf("failed to marshal object to JSON: %#v", err.Error())
 	}
 	return string(bytes), nil
 }

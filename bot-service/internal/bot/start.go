@@ -15,7 +15,7 @@ func StartCommand(app *app.App, message *tgbotapi.Message) error {
 	msg := tgbotapi.NewMessage(message.Chat.ID, START_MESSAGE)
 	session, err := app.RepoChat.GetOrCreateChat(message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 
 	if !session.HaveUserPhone() {

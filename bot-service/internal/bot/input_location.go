@@ -16,7 +16,7 @@ func InputLocationHandler(app *app.App, input string, session *chat.Chat) error 
 		session.ChatState = chat.INPUT_DELIVERY_TIME
 		strOrder, err := order.ToJson()
 		if err != nil {
-			return fmt.Errorf("json error for order  =%s", err)
+			return fmt.Errorf("json error for order  =%s", err.Error())
 		}
 		session.OrderStr = strOrder
 		err = app.RepoChat.UpdateChat(session)

@@ -12,7 +12,7 @@ func ProfileDisplayHistory(app *app.App, callback *tgbotapi.CallbackQuery) error
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 
 	orders, err := app.OrderController.GetLast(3)

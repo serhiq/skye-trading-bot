@@ -101,11 +101,11 @@ func New() (*Config, error) {
 	}
 
 	if err := os.MkdirAll(filepath.Dir(TempPatch), fs.ModeDir); err != nil {
-		return nil, fmt.Errorf("config: failed creating tmp path %s (%s)", filepath.Dir(TempPatch), err)
+		return nil, fmt.Errorf("config: failed creating tmp path %s (%s)", filepath.Dir(TempPatch), err.Error())
 	}
 
 	if err := os.MkdirAll(filepath.Dir(PreviewCachePatch), fs.ModeDir); err != nil {
-		return nil, fmt.Errorf("config: failed creating cache path %s (%s)", filepath.Dir(PreviewCachePatch), err)
+		return nil, fmt.Errorf("config: failed creating cache path %s (%s)", filepath.Dir(PreviewCachePatch), err.Error())
 	}
 
 	config.Project.Version = version

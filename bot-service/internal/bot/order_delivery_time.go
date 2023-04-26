@@ -19,7 +19,7 @@ func ClickOnSetTimeCallback(app *app.App, callback *tgbotapi.CallbackQuery) erro
 	var c = commands.New(callback.Data)
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 
@@ -35,7 +35,7 @@ func ClickOnSetTimeCallback(app *app.App, callback *tgbotapi.CallbackQuery) erro
 
 	strOrder, err := order.ToJson()
 	if err != nil {
-		return fmt.Errorf("json error for order  =%s", err)
+		return fmt.Errorf("json error for order  =%s", err.Error())
 	}
 	session.OrderStr = strOrder
 

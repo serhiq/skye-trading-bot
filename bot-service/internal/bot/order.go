@@ -11,8 +11,7 @@ import (
 func CreateOrderHandler(app *app.App, message *tgbotapi.Message) error {
 	session, err := app.RepoChat.GetOrCreateChat(message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
-
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 
 	order := session.GetDraftOrder()
@@ -43,7 +42,7 @@ func ClickOnSetDeliveryCallbackHandler(app *app.App, callback *tgbotapi.Callback
 	var c = commands.New(callback.Data)
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 
@@ -61,7 +60,7 @@ func ClickOnSetDeliveryCallbackHandler(app *app.App, callback *tgbotapi.Callback
 
 		strOrder, err := order.ToJson()
 		if err != nil {
-			return fmt.Errorf("json error for order  =%s", err)
+			return fmt.Errorf("json error for order  =%s", err.Error())
 		}
 		session.OrderStr = strOrder
 
@@ -86,7 +85,7 @@ func ClickOnSetDeliveryCallbackHandler(app *app.App, callback *tgbotapi.Callback
 
 		strOrder, err := order.ToJson()
 		if err != nil {
-			return fmt.Errorf("json error for order  =%s", err)
+			return fmt.Errorf("json error for order  =%s", err.Error())
 		}
 		session.OrderStr = strOrder
 

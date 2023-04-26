@@ -12,12 +12,12 @@ func ClickOnDecreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 	var c = commands.New(callback.Data)
 	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
+		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err.Error())
 	}
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 
 	order := session.GetDraftOrder()
@@ -78,12 +78,12 @@ func ClickOnIncreasePositionCallbackHandler(app *app.App, callback *tgbotapi.Cal
 	var c = commands.New(callback.Data)
 	menuItem, err := app.ProductController.GetProductByUuid(c.Uuid)
 	if err != nil {
-		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err)
+		return fmt.Errorf("Failed to get menu item %s, err:  %s", c.Uuid, err.Error())
 	}
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 

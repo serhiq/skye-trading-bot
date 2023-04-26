@@ -9,7 +9,7 @@ import (
 func DisplayOrderConfirm(app *app.App, chatId int64) error {
 	session, err := app.RepoChat.GetOrCreateChat(chatId)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 
@@ -42,7 +42,7 @@ func ClickOnConfirm(app *app.App, callback *tgbotapi.CallbackQuery) error {
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 
 	order := session.GetDraftOrder()
@@ -71,12 +71,12 @@ func ClickOnCancel(app *app.App, callback *tgbotapi.CallbackQuery) error {
 	var deleteMsg = tgbotapi.NewDeleteMessage(callback.Message.Chat.ID, callback.Message.MessageID)
 	err := app.Bot.Reply(deleteMsg)
 	if err != nil {
-		fmt.Printf("error delete message: %s", err)
+		fmt.Printf("error delete message: %s", err.Error())
 	}
 
 	session, err := app.RepoChat.GetOrCreateChat(callback.Message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 	}
 
 	session.NewOrder()

@@ -171,7 +171,7 @@ func resizeTmpFile(tmpDest string, filename string) error {
 
 	img, err := jpeg.Decode(file)
 	if err != nil {
-		return fmt.Errorf("%s while decoding", err)
+		return fmt.Errorf("%s while decoding", err.Error())
 	}
 
 	m := resize.Resize(0, 300, img, resize.Lanczos3)

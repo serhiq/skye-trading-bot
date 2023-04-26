@@ -10,7 +10,7 @@ import (
 func ContactHandler(app *app.App, message *tgbotapi.Message) error {
 	session, err := app.RepoChat.GetOrCreateChat(message.Chat.ID)
 	if err != nil {
-		return fmt.Errorf("Failed to get chat  %s", err)
+		return fmt.Errorf("Failed to get chat  %s", err.Error())
 
 	}
 

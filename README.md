@@ -33,6 +33,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+[Live demo](https://t.me/SkayRestobot)
+
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
 Skye Trading Bot - это торговый бот для Telegram, который использует API Resto Evotor для создания заказов в ресторане. Бот позволяет пользователям просматривать меню, создавать и редактировать заказы, а также получать информацию о статусе и оплате заказа.
